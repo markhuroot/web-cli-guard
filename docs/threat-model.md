@@ -1,5 +1,7 @@
 # Threat Model
 
+English | [繁體中文](./threat-model.zh-TW.md)
+
 ## Designed to Mitigate
 
 - accidental execution of dangerous commands by normal operators
