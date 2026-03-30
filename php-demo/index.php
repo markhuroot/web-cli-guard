@@ -106,6 +106,13 @@ declare(strict_types=1);
             border-radius: 999px;
             background: #3b82f6;
         }
+        .badge.bridge {
+            background: #ecfdf5;
+            color: #047857;
+        }
+        .badge.bridge::before {
+            background: #10b981;
+        }
         .screen {
             min-height: 340px;
             max-height: 56vh;
@@ -192,7 +199,7 @@ declare(strict_types=1);
             </div>
             <div class="card">
                 <div class="status" id="demo-status">Loading demo session...</div>
-                <div class="badge">Plain PHP Demo</div>
+                <div class="badge" id="demo-badge">Plain PHP Demo</div>
                 <div class="screen" id="demo-screen">Loading...</div>
                 <div class="row">
                     <button type="button" data-key="Enter">Enter</button>
@@ -215,7 +222,7 @@ declare(strict_types=1);
                     </div>
                 </form>
                 <div class="note">
-                    This demo does not execute shell commands. It simulates session output so you can evaluate the web interaction model before wiring a real bridge.
+                    This demo runs in safe local simulation mode by default. If `WCG_BRIDGE_URL` and `WCG_BRIDGE_TOKEN` are configured for `api.php`, the same UI can switch to a real tmux bridge.
                 </div>
             </div>
         </div>
@@ -225,10 +232,12 @@ declare(strict_types=1);
             var sessionContainer = document.getElementById('demo-sessions');
             var statusNode = document.getElementById('demo-status');
             var screenNode = document.getElementById('demo-screen');
+            var badgeNode = document.getElementById('demo-badge');
             var form = document.getElementById('demo-form');
             var refreshButton = document.getElementById('demo-refresh');
             var currentSession = 'agent-main';
             var isBusy = false;
+            var runtimeMode = 'demo';
 
             function setStatus(message) {
                 statusNode.textContent = message;
@@ -242,6 +251,20 @@ declare(strict_types=1);
                 }).then(function (response) {
                     return response.json();
                 });
+            }
+
+            function applyRuntimeMode(mode) {
+                runtimeMode = String(mode || 'demo');
+                if (!badgeNode) {
+                    return;
+                }
+                if (runtimeMode === 'bridge') {
+                    badgeNode.textContent = 'Bridge Mode';
+                    badgeNode.classList.add('bridge');
+                } else {
+                    badgeNode.textContent = 'Plain PHP Demo';
+                    badgeNode.classList.remove('bridge');
+                }
             }
 
             function renderSessions(items) {
@@ -268,6 +291,7 @@ declare(strict_types=1);
                         if (!(json && json.ok && Array.isArray(json.items))) {
                             throw new Error('Failed to load sessions');
                         }
+                        applyRuntimeMode(json.runtime_mode || 'demo');
                         renderSessions(json.items);
                     });
             }
@@ -281,6 +305,7 @@ declare(strict_types=1);
                     if (!(json && json.ok)) {
                         throw new Error(json && json.message ? json.message : 'Capture failed');
                     }
+                    applyRuntimeMode(json.runtime_mode || runtimeMode);
                     screenNode.textContent = String(json.output || '');
                     screenNode.scrollTop = screenNode.scrollHeight;
                     setStatus('Ready: ' + currentSession);
@@ -298,9 +323,10 @@ declare(strict_types=1);
                     if (!(json && json.ok)) {
                         throw new Error(json && json.message ? json.message : 'Send failed');
                     }
+                    applyRuntimeMode(json.runtime_mode || runtimeMode);
                     screenNode.textContent = String(json.output || '');
                     screenNode.scrollTop = screenNode.scrollHeight;
-                    setStatus(successLabel);
+                    setStatus(successLabel + (runtimeMode === 'bridge' ? ' (bridge)' : ' (demo)'));
                 }).catch(function (error) {
                     setStatus(error && error.message ? error.message : 'Send failed');
                 }).finally(function () {

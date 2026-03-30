@@ -38,12 +38,13 @@ final class WebCliGuardPlugin
             return '<div class="wcg-console-denied">You do not have access to this console.</div>';
         }
 
-        $sessions = self::get_demo_sessions();
+        $sessions = self::get_available_sessions();
         $defaultSession = (string) ($sessions[0]['name'] ?? '');
+        $bridgeMode = self::is_bridge_enabled() ? 'bridge' : 'demo';
 
         ob_start();
         ?>
-        <div class="wcg-console" data-wcg-console="1" data-wcg-default-session="<?php echo esc_attr($defaultSession); ?>">
+        <div class="wcg-console" data-wcg-console="1" data-wcg-default-session="<?php echo esc_attr($defaultSession); ?>" data-wcg-runtime-mode="<?php echo esc_attr($bridgeMode); ?>">
             <style>
                 .wcg-console { max-width: 1180px; margin: 24px auto; padding: 24px; border: 1px solid #d7dee8; border-radius: 24px; background: #fff; box-shadow: 0 16px 36px rgba(15,23,42,.06); color: #17212f; }
                 .wcg-console h2 { margin: 0 0 8px; font-size: 28px; }
@@ -87,7 +88,7 @@ final class WebCliGuardPlugin
                 </div>
                 <div class="wcg-card">
                     <div class="wcg-status" data-wcg-status="1">Loading demo session...</div>
-                    <div class="wcg-badge">Demo Mode</div>
+                    <div class="wcg-badge" data-wcg-badge="1"><?php echo $bridgeMode === 'bridge' ? 'Bridge Mode' : 'Demo Mode'; ?></div>
                     <div class="wcg-screen" data-wcg-screen="1">Loading...</div>
                     <div class="wcg-actions">
                         <button type="button" data-wcg-key="Enter">Enter</button>
@@ -110,7 +111,7 @@ final class WebCliGuardPlugin
                         </div>
                     </form>
                     <div class="wcg-note">
-                        This demo does not execute real commands. In a production setup, wire the same UI flow to a narrow bridge, a low-privilege runtime user, audit logs, elevated-command verification, and OS-level sandboxing.
+                        This UI stays in local demo mode by default. If a bridge URL, token, and allowed sessions are configured, it can switch to a real tmux-backed bridge while keeping the same operator flow.
                     </div>
                 </div>
             </div>
@@ -124,7 +125,9 @@ final class WebCliGuardPlugin
                     var ajaxUrl = <?php echo wp_json_encode(admin_url('admin-ajax.php')); ?>;
                     var nonce = <?php echo wp_json_encode(wp_create_nonce(self::NONCE_ACTION)); ?>;
                     var currentSession = root.getAttribute('data-wcg-default-session') || '';
+                    var runtimeMode = root.getAttribute('data-wcg-runtime-mode') || 'demo';
                     var statusNode = root.querySelector('[data-wcg-status="1"]');
+                    var badgeNode = root.querySelector('[data-wcg-badge="1"]');
                     var screenNode = root.querySelector('[data-wcg-screen="1"]');
                     var form = root.querySelector('[data-wcg-form="1"]');
                     var isBusy = false;
@@ -140,6 +143,14 @@ final class WebCliGuardPlugin
                         root.querySelectorAll('[data-wcg-session]').forEach(function (button) {
                             button.classList.toggle('is-active', button.getAttribute('data-wcg-session') === currentSession);
                         });
+                    }
+
+                    function applyRuntimeMode(mode) {
+                        runtimeMode = String(mode || 'demo');
+                        if (!badgeNode) {
+                            return;
+                        }
+                        badgeNode.textContent = runtimeMode === 'bridge' ? 'Bridge Mode' : 'Demo Mode';
                     }
 
                     function postAction(mode, extra) {
@@ -168,6 +179,7 @@ final class WebCliGuardPlugin
                             if (!(json && json.success && json.data)) {
                                 throw new Error(json && json.data && json.data.message ? json.data.message : 'Capture failed');
                             }
+                            applyRuntimeMode(json.data.runtime_mode || runtimeMode);
                             if (screenNode) {
                                 screenNode.textContent = String(json.data.output || '');
                                 screenNode.scrollTop = screenNode.scrollHeight;
@@ -189,7 +201,8 @@ final class WebCliGuardPlugin
                             if (!(json && json.success)) {
                                 throw new Error(json && json.data && json.data.message ? json.data.message : 'Send failed');
                             }
-                            setStatus(successLabel);
+                            applyRuntimeMode(json.data && json.data.runtime_mode ? json.data.runtime_mode : runtimeMode);
+                            setStatus(successLabel + (runtimeMode === 'bridge' ? ' (bridge)' : ' (demo)'));
                             isBusy = false;
                             refreshOutput();
                         }).catch(function (error) {
@@ -271,9 +284,18 @@ final class WebCliGuardPlugin
         }
 
         if ($mode === 'capture') {
+            if (self::is_bridge_enabled()) {
+                $capture = self::bridge_request('GET', '/capture?session=' . rawurlencode($session));
+                wp_send_json_success([
+                    'session' => $session,
+                    'output' => (string) ($capture['output'] ?? ''),
+                    'runtime_mode' => 'bridge',
+                ]);
+            }
             wp_send_json_success([
                 'session' => $session,
                 'output' => self::get_demo_output($session),
+                'runtime_mode' => 'demo',
             ]);
         }
 
@@ -284,10 +306,31 @@ final class WebCliGuardPlugin
             if ($text === '' && $key === '') {
                 wp_send_json_error(['message' => 'Nothing to send.'], 400);
             }
+            if (self::is_bridge_enabled()) {
+                if ($text !== '') {
+                    self::bridge_request('POST', '/send-text', [
+                        'session' => $session,
+                        'text' => $text,
+                        'append_enter' => $appendEnter,
+                    ]);
+                } else {
+                    self::bridge_request('POST', '/send-key', [
+                        'session' => $session,
+                        'key' => $key,
+                    ]);
+                }
+                $capture = self::bridge_request('GET', '/capture?session=' . rawurlencode($session));
+                wp_send_json_success([
+                    'session' => $session,
+                    'output' => (string) ($capture['output'] ?? ''),
+                    'runtime_mode' => 'bridge',
+                ]);
+            }
             self::apply_demo_input($session, $text, $key, $appendEnter);
             wp_send_json_success([
                 'session' => $session,
                 'output' => self::get_demo_output($session),
+                'runtime_mode' => 'demo',
             ]);
         }
 
@@ -310,12 +353,12 @@ final class WebCliGuardPlugin
         register_setting('wcg_demo_settings', self::OPTION_BRIDGE_URL, [
             'type' => 'string',
             'sanitize_callback' => 'esc_url_raw',
-            'default' => 'http://127.0.0.1:47631',
+            'default' => '',
         ]);
         register_setting('wcg_demo_settings', self::OPTION_BRIDGE_TOKEN, [
             'type' => 'string',
             'sanitize_callback' => [self::class, 'sanitize_token'],
-            'default' => 'replace-this-token',
+            'default' => '',
         ]);
         register_setting('wcg_demo_settings', self::OPTION_RUNTIME_USER, [
             'type' => 'string',
@@ -335,8 +378,8 @@ final class WebCliGuardPlugin
             wp_die('You do not have permission to access this page.');
         }
 
-        $bridgeUrl = (string) get_option(self::OPTION_BRIDGE_URL, 'http://127.0.0.1:47631');
-        $bridgeToken = (string) get_option(self::OPTION_BRIDGE_TOKEN, 'replace-this-token');
+        $bridgeUrl = (string) get_option(self::OPTION_BRIDGE_URL, '');
+        $bridgeToken = (string) get_option(self::OPTION_BRIDGE_TOKEN, '');
         $runtimeUser = (string) get_option(self::OPTION_RUNTIME_USER, 'tmuxsvc');
         $allowedSessions = (string) get_option(self::OPTION_ALLOWED_SESSIONS, 'agent-main,repo-main');
         ?>
@@ -350,7 +393,7 @@ final class WebCliGuardPlugin
                         <th scope="row"><label for="wcg-demo-bridge-url">Bridge URL</label></th>
                         <td>
                             <input id="wcg-demo-bridge-url" name="<?php echo esc_attr(self::OPTION_BRIDGE_URL); ?>" type="url" class="regular-text code" value="<?php echo esc_attr($bridgeUrl); ?>">
-                            <p class="description">Example: `http://127.0.0.1:47631`</p>
+                            <p class="description">Example: `http://127.0.0.1:8765`</p>
                         </td>
                     </tr>
                     <tr>
@@ -378,7 +421,7 @@ final class WebCliGuardPlugin
                 <?php submit_button('Save Demo Settings'); ?>
             </form>
             <div style="margin-top:18px;padding:14px 16px;border:1px solid #fed7aa;border-radius:14px;background:#fff7ed;color:#9a3412;max-width:860px;">
-                The demo console still simulates commands locally in WordPress. These settings are meant to illustrate how a real bridge-backed deployment would be configured.
+                If bridge settings are valid, the public demo console can switch from local simulation to real bridge-backed session capture and send actions. OTP, approval, and command classification should still stay in the web layer.
             </div>
         </div>
         <?php
@@ -392,13 +435,36 @@ final class WebCliGuardPlugin
         ];
     }
 
+    private static function get_available_sessions(): array
+    {
+        if (!self::is_bridge_enabled()) {
+            return self::get_demo_sessions();
+        }
+        $json = self::bridge_try_request('GET', '/sessions');
+        if (!is_array($json)) {
+            return self::get_demo_sessions();
+        }
+        $items = [];
+        foreach ((array) ($json['sessions'] ?? []) as $item) {
+            $name = trim((string) ($item['name'] ?? ''));
+            if ($name === '') {
+                continue;
+            }
+            $items[] = [
+                'name' => $name,
+                'label' => 'Bridge-backed tmux session',
+            ];
+        }
+        return $items !== [] ? $items : self::get_demo_sessions();
+    }
+
     private static function sanitize_session(string $session): string
     {
         $session = trim($session);
         if ($session === '' || preg_match('/^[a-z0-9._:-]+$/i', $session) !== 1) {
             return '';
         }
-        foreach (self::get_demo_sessions() as $item) {
+        foreach (self::get_available_sessions() as $item) {
             if ((string) $item['name'] === $session) {
                 return $session;
             }
@@ -549,6 +615,60 @@ final class WebCliGuardPlugin
             return $item !== '';
         }));
         return implode(',', array_unique($parts));
+    }
+
+    private static function is_bridge_enabled(): bool
+    {
+        return self::get_bridge_url() !== '' && self::get_bridge_token() !== '';
+    }
+
+    private static function get_bridge_url(): string
+    {
+        return rtrim((string) get_option(self::OPTION_BRIDGE_URL, ''), '/');
+    }
+
+    private static function get_bridge_token(): string
+    {
+        return (string) get_option(self::OPTION_BRIDGE_TOKEN, '');
+    }
+
+    private static function bridge_request(string $method, string $path, array $payload = []): array
+    {
+        $json = self::bridge_try_request($method, $path, $payload);
+        if (!is_array($json)) {
+            wp_send_json_error(['message' => 'Bridge request failed.'], 502);
+        }
+        return $json;
+    }
+
+    private static function bridge_try_request(string $method, string $path, array $payload = []): ?array
+    {
+        $args = [
+            'method' => $method,
+            'timeout' => 10,
+            'headers' => [
+                'Authorization' => 'Bearer ' . self::get_bridge_token(),
+                'Accept' => 'application/json',
+            ],
+        ];
+        if ($method === 'POST') {
+            $args['headers']['Content-Type'] = 'application/json';
+            $args['body'] = wp_json_encode($payload);
+        }
+
+        $response = wp_remote_request(self::get_bridge_url() . $path, $args);
+        if (is_wp_error($response)) {
+            return null;
+        }
+
+        $json = json_decode((string) wp_remote_retrieve_body($response), true);
+        if (!is_array($json)) {
+            return null;
+        }
+        if (!($json['ok'] ?? false)) {
+            return null;
+        }
+        return $json;
     }
 }
 

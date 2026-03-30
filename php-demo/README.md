@@ -41,6 +41,15 @@ Then open:
 
 ## Safety
 
-This demo does not execute shell commands.
+This demo does not execute shell commands by default.
 
 It simulates command output in PHP session state so the UI behavior can be evaluated without exposing the host.
+
+If you want to switch the same UI to a real bridge, set:
+
+```bash
+export WCG_BRIDGE_URL=http://127.0.0.1:8765
+export WCG_BRIDGE_TOKEN=change-me
+```
+
+Then `api.php` will proxy session listing, capture, text send, and special-key send to the bridge instead of local demo state.
