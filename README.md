@@ -86,6 +86,8 @@ Not included yet:
 
 - `docs/architecture.md`
   High-level request flow and component boundaries
+- `docs/bridge-api.md`
+  Minimal HTTP contract for a narrow tmux bridge
 - `docs/threat-model.md`
   What this pattern mitigates and what it does not
 - `docs/roadmap.md`
@@ -96,6 +98,8 @@ Not included yet:
   Example service units
 - `examples/scripts/`
   Example bootstrap/helper scripts
+- `python-bridge/`
+  Minimal real tmux bridge implemented with the Python standard library
 - `wordpress-plugin/web-cli-guard/`
   Minimal WordPress plugin starter
 - `php-demo/`
@@ -176,10 +180,32 @@ The current public demo plugin now shows:
 ## Getting Started
 
 1. Read [architecture.md](./docs/architecture.md)
-2. Read [threat-model.md](./docs/threat-model.md)
-3. Review the example files under `examples/`
-4. Adapt the WordPress plugin scaffold or build your own web UI
-5. Keep secrets out of the repository
+2. Read [bridge-api.md](./docs/bridge-api.md)
+3. Read [threat-model.md](./docs/threat-model.md)
+4. Review the example files under `examples/`
+5. Try the safe UI demos first, or run the minimal Python bridge
+6. Adapt the WordPress plugin scaffold or build your own web UI
+7. Keep secrets out of the repository
+
+## First Runtime Bridge
+
+This repository now includes a small real bridge example under [`python-bridge/`](./python-bridge/).
+
+It is useful when you want to move from:
+
+- UI-only demo flow
+
+to:
+
+- a real tmux-backed bridge with a narrow API
+
+The example stays intentionally small:
+
+- Python standard library only
+- bearer-token protected
+- session allowlist based
+- `list-sessions`, `capture-pane`, `send-text`, `send-key`
+- no arbitrary shell execution endpoint
 
 ## Publishing Advice
 
