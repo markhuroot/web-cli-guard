@@ -166,6 +166,30 @@ Before pushing this style of project to GitHub:
 
 See [release-checklist.md](./docs/release-checklist.md).
 
+## Suggested Screenshots
+
+If you publish this repo, the most useful first screenshots are:
+
+1. the WordPress demo console
+2. the WordPress settings page
+3. the plain PHP demo console
+
+See [screenshots.md](./docs/screenshots.md) for suggested captions and what to avoid revealing.
+
+## First Release Draft
+
+For a suggested first GitHub release note, see [release-notes-v0.1.md](./docs/release-notes-v0.1.md).
+
+## Push Template
+
+When your GitHub repository exists, use:
+
+```bash
+cd /var/www/html/server/oss/web-cli-guard
+git remote add origin <your-github-repo-url>
+git push -u origin main
+```
+
 ## License
 
 This scaffold is released under the MIT License. See [LICENSE](./LICENSE).
