@@ -152,6 +152,27 @@ bridge 則應該只提供有限指令，例如：
 - `capture-pane`
 - `send-keys`
 
+## 為什麼這會比一般 Web Shell 更安全
+
+這個模式的重點不是瀏覽器本身多安全，而是把真正的邊界放在 runtime 上。
+
+實務上比較重要的是：
+
+- CLI 跑在 `tmux` 裡
+- `tmux` 跑在低權限 OS 帳號下
+- Web 層只暴露狹窄的 bridge action
+- 高風險操作仍需在 Web 層做 OTP 或核准
+
+所以真正要問的不是：
+
+- 瀏覽器能畫出多少控制項
+
+而是：
+
+- runtime user 到底能讀什麼、寫什麼、執行什麼
+
+如果 runtime user 沒有 `sudo`、可寫路徑很窄、session allowlist 很小，那 Web 入口實際上也會繼承這些限制。
+
 ## WordPress 使用情境
 
 這個 repository 內含最小的 WordPress plugin scaffold，因為很多團隊本來就有內部 WordPress 環境，而且通常會想要：
@@ -217,30 +238,6 @@ bridge 則應該只提供有限指令，例如：
 - 提供 `health / sessions / capture / send-text / send-key`
 - 不提供任意 shell execution API
 
-## 發佈建議
-
-把這種類型的專案推到 GitHub 前，至少先做：
-
-1. 移除環境專屬 branding
-2. 替換真實 domain、mail host、token
-3. 確認 runtime 帳號沒有額外高權限
-4. 重新檢查 release checklist
-
-可參考 [release-checklist.md](./docs/release-checklist.md)。
-
-## 建議截圖
-
-如果你要公開這個 repo，第一批最有用的截圖通常是：
-
-1. WordPress demo console
-2. WordPress settings page
-3. 純 PHP demo console
-4. 高權限操作的 approval / OTP flow
-
-請參考 [screenshots.md](./docs/screenshots.md) 了解 caption 建議與避免曝光的資訊。
-檔名與輸出步驟請看 [screenshot-checklist.md](./docs/screenshot-checklist.md)。
-實拍畫面規劃請看 [screenshot-shot-plan.md](./docs/screenshot-shot-plan.md)。
-
 ## 截圖區
 
 加入實際圖片後，下方區塊可以直接成為 GitHub 首頁的展示區。
@@ -266,21 +263,6 @@ bridge 則應該只提供有限指令，例如：
 第一版 release 草稿可參考 [release-notes-v0.1.md](./docs/release-notes-v0.1.md)。
 針對公開版補強的 `v0.1.1` 可參考 [release-notes-v0.1.1.md](./docs/release-notes-v0.1.1.md)。
 第一個 bridge-capable starter 版本可參考 [release-notes-v0.2.0.md](./docs/release-notes-v0.2.0.md)。
-
-## GitHub About 建議
-
-repository description 與 topics 可參考 [github-publish-notes.md](./docs/github-publish-notes.md)。
-最終可直接貼上的版本可參考 [github-about-final.md](./docs/github-about-final.md)。
-
-## Push 範本
-
-當你的 GitHub repository 建好之後，可以用：
-
-```bash
-cd /var/www/html/server/oss/web-cli-guard
-git remote add origin <your-github-repo-url>
-git push -u origin main
-```
 
 ## License
 

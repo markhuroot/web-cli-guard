@@ -148,6 +148,25 @@ The bridge should allow only a narrow command set such as:
 - `capture-pane`
 - `send-keys`
 
+## How This Stays Safer Than a Web Shell
+
+The browser is not the main security boundary here.
+
+The practical safety model is:
+
+- the CLI runs inside `tmux`
+- `tmux` runs under a low-privilege OS account
+- the web layer only exposes narrow bridge actions
+- elevated operations should require OTP or approval in the web layer
+
+That means the most important question is not "what can the browser render?"
+
+The important question is:
+
+- what can the runtime user actually read, write, or execute?
+
+If the runtime user has no `sudo`, limited writable paths, and a tight session allowlist, the browser-facing operator UI inherits those limits.
+
 ## WordPress Use Case
 
 This repository includes a minimal WordPress plugin scaffold because many teams already have an internal WordPress environment and want:
@@ -212,30 +231,6 @@ The example stays intentionally small:
 - `list-sessions`, `capture-pane`, `send-text`, `send-key`
 - no arbitrary shell execution endpoint
 
-## Publishing Advice
-
-Before pushing this style of project to GitHub:
-
-1. remove any environment-specific branding
-2. replace real domains, mail hosts, and tokens
-3. verify the runtime account has no unexpected privilege
-4. review the release checklist
-
-See [release-checklist.md](./docs/release-checklist.md).
-
-## Suggested Screenshots
-
-If you publish this repo, the most useful first screenshots are:
-
-1. the WordPress demo console
-2. the WordPress settings page
-3. the plain PHP demo console
-4. an example operator flow with elevated-command verification or approval
-
-See [screenshots.md](./docs/screenshots.md) for suggested captions and what to avoid revealing.
-Use [screenshot-checklist.md](./docs/screenshot-checklist.md) for filenames and export steps.
-Use [screenshot-shot-plan.md](./docs/screenshot-shot-plan.md) for the exact first-pass capture plan.
-
 ## Screenshot Slots
 
 Once you add real images under `assets/screenshots/`, the section below can act as the GitHub landing gallery.
@@ -261,20 +256,6 @@ Once you add real images under `assets/screenshots/`, the section below can act 
 For a suggested first GitHub release note, see [release-notes-v0.1.md](./docs/release-notes-v0.1.md).
 For the next small presentation-focused release, see [release-notes-v0.1.1.md](./docs/release-notes-v0.1.1.md).
 For the first bridge-capable starter release, see [release-notes-v0.2.0.md](./docs/release-notes-v0.2.0.md).
-
-## Suggested GitHub About
-
-Repository description and topics are suggested in [github-publish-notes.md](./docs/github-publish-notes.md).
-
-## Push Template
-
-When your GitHub repository exists, use:
-
-```bash
-cd /var/www/html/server/oss/web-cli-guard
-git remote add origin <your-github-repo-url>
-git push -u origin main
-```
 
 ## License
 
