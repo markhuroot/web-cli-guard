@@ -226,6 +226,7 @@ Once you add real images under `assets/screenshots/`, the section below can act 
 ## First Release Draft
 
 For a suggested first GitHub release note, see [release-notes-v0.1.md](./docs/release-notes-v0.1.md).
+For the next small presentation-focused release, see [release-notes-v0.1.1.md](./docs/release-notes-v0.1.1.md).
 
 ## Suggested GitHub About
 
