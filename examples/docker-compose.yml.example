@@ -1,0 +1,31 @@
+version: "3.8"
+
+services:
+  web-cli-guard-bridge:
+    image: python:3.12-slim
+    working_dir: /app
+    command:
+      - python3
+      - python-bridge/server.py
+      - --host
+      - 0.0.0.0
+      - --port
+      - "8765"
+      - --token
+      - change-me
+      - --socket
+      - /tmux/default.sock
+      - --allow-session
+      - agent-main
+    ports:
+      - "127.0.0.1:8765:8765"
+    volumes:
+      - ..:/app:ro
+      - /var/lib/web-cli-guard-tmux:/tmux
+    restart: unless-stopped
+
+    # Notes:
+    # - Keep the published port bound to 127.0.0.1 when possible.
+    # - The tmux socket path must already exist on the host.
+    # - This example only runs the bridge. The tmux runtime user/session
+    #   should still be managed outside this container.

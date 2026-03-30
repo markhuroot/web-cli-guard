@@ -86,6 +86,8 @@ Not included yet:
 
 - `docs/architecture.md`
   High-level request flow and component boundaries
+- `docs/quickstart.md`
+  Shortest path from clone to a real tmux-backed bridge
 - `docs/bridge-api.md`
   Minimal HTTP contract for a narrow tmux bridge
 - `docs/threat-model.md`
@@ -98,6 +100,8 @@ Not included yet:
   Example service units
 - `examples/scripts/`
   Example bootstrap/helper scripts
+- `examples/docker-compose.yml.example`
+  Example containerized bridge wrapper
 - `python-bridge/`
   Minimal real tmux bridge implemented with the Python standard library
 - `wordpress-plugin/web-cli-guard/`
@@ -180,12 +184,13 @@ The current public demo plugin now shows:
 ## Getting Started
 
 1. Read [architecture.md](./docs/architecture.md)
-2. Read [bridge-api.md](./docs/bridge-api.md)
-3. Read [threat-model.md](./docs/threat-model.md)
-4. Review the example files under `examples/`
-5. Try the safe UI demos first, or run the minimal Python bridge
-6. Adapt the WordPress plugin scaffold or build your own web UI
-7. Keep secrets out of the repository
+2. Follow [quickstart.md](./docs/quickstart.md)
+3. Read [bridge-api.md](./docs/bridge-api.md)
+4. Read [threat-model.md](./docs/threat-model.md)
+5. Review the example files under `examples/`
+6. Try the safe UI demos first, or run the minimal Python bridge
+7. Adapt the WordPress plugin scaffold or build your own web UI
+8. Keep secrets out of the repository
 
 ## First Runtime Bridge
 
