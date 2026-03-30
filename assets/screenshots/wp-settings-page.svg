@@ -1,16 +1,47 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="720" viewBox="0 0 1280 720" role="img" aria-labelledby="title desc">
-  <title id="title">WordPress Settings Placeholder</title>
-  <desc id="desc">Placeholder image for the WordPress settings page screenshot.</desc>
-  <rect width="1280" height="720" fill="#f2efe7"/>
-  <rect x="72" y="48" width="1136" height="624" rx="24" fill="#fffdf8" stroke="#1f2937" stroke-width="4"/>
-  <text x="118" y="116" font-family="Arial, sans-serif" font-size="34" fill="#234a3b">Web CLI Guard Settings</text>
-  <rect x="116" y="156" width="1048" height="92" rx="16" fill="#f7f3ea" stroke="#234a3b" stroke-width="3"/>
-  <rect x="116" y="278" width="1048" height="92" rx="16" fill="#f7f3ea" stroke="#234a3b" stroke-width="3"/>
-  <rect x="116" y="400" width="1048" height="92" rx="16" fill="#f7f3ea" stroke="#234a3b" stroke-width="3"/>
-  <rect x="116" y="522" width="1048" height="92" rx="16" fill="#f7f3ea" stroke="#234a3b" stroke-width="3"/>
-  <text x="146" y="208" font-family="Arial, sans-serif" font-size="24" fill="#1f2937">Bridge URL</text>
-  <text x="146" y="330" font-family="Arial, sans-serif" font-size="24" fill="#1f2937">Bridge Token</text>
-  <text x="146" y="452" font-family="Arial, sans-serif" font-size="24" fill="#1f2937">Runtime User</text>
-  <text x="146" y="574" font-family="Arial, sans-serif" font-size="24" fill="#1f2937">Allowed Sessions</text>
-  <text x="522" y="646" font-family="Arial, sans-serif" font-size="24" fill="#1f2937">Placeholder screenshot. Replace with a real capture.</text>
+<svg xmlns="http://www.w3.org/2000/svg" width="1500" height="980" viewBox="0 0 1500 980" role="img" aria-labelledby="title desc">
+  <title id="title">Web CLI Guard Settings Page</title>
+  <desc id="desc">Public mock screenshot for the WordPress settings page.</desc>
+  <rect width="1500" height="980" fill="#f5f0e7"/>
+  <rect x="58" y="42" width="1384" height="896" rx="28" fill="#f7f4ee"/>
+  <rect x="58" y="42" width="252" height="896" rx="28" fill="#1f2937"/>
+  <text x="102" y="110" font-family="Arial, sans-serif" font-size="30" font-weight="700" fill="#f9fafb">WordPress Admin</text>
+  <text x="102" y="164" font-family="Arial, sans-serif" font-size="20" fill="#cbd5e1">Dashboard</text>
+  <text x="102" y="208" font-family="Arial, sans-serif" font-size="20" fill="#cbd5e1">Posts</text>
+  <text x="102" y="252" font-family="Arial, sans-serif" font-size="20" fill="#cbd5e1">Pages</text>
+  <rect x="84" y="290" width="200" height="48" rx="14" fill="#234a3b"/>
+  <text x="108" y="322" font-family="Arial, sans-serif" font-size="20" font-weight="700" fill="#ffffff">Web CLI Guard</text>
+  <text x="102" y="382" font-family="Arial, sans-serif" font-size="20" fill="#cbd5e1">Settings</text>
+  <text x="102" y="426" font-family="Arial, sans-serif" font-size="20" fill="#cbd5e1">Users</text>
+
+  <text x="360" y="118" font-family="Arial, sans-serif" font-size="44" font-weight="700" fill="#1f2937">Web CLI Guard</text>
+  <text x="360" y="162" font-family="Arial, sans-serif" font-size="22" fill="#4b5563">Public demo settings for a bridge-backed tmux operator workflow.</text>
+
+  <rect x="360" y="206" width="1060" height="560" rx="26" fill="#fffdf9" stroke="#d6d3d1" stroke-width="3"/>
+
+  <text x="404" y="278" font-family="Arial, sans-serif" font-size="24" font-weight="700" fill="#1f2937">Bridge URL</text>
+  <rect x="680" y="240" width="650" height="54" rx="12" fill="#f8fafc" stroke="#cbd5e1" stroke-width="2"/>
+  <text x="704" y="274" font-family="Courier New, monospace" font-size="21" fill="#111827">https://bridge.example.test/tmux</text>
+  <text x="680" y="322" font-family="Arial, sans-serif" font-size="19" fill="#6b7280">Example: http://127.0.0.1:47631</text>
+
+  <text x="404" y="402" font-family="Arial, sans-serif" font-size="24" font-weight="700" fill="#1f2937">Bridge Token</text>
+  <rect x="680" y="364" width="650" height="54" rx="12" fill="#f8fafc" stroke="#cbd5e1" stroke-width="2"/>
+  <text x="704" y="398" font-family="Courier New, monospace" font-size="21" fill="#111827">demo-token-redacted</text>
+  <text x="680" y="446" font-family="Arial, sans-serif" font-size="19" fill="#6b7280">Use an environment-specific secret outside version control.</text>
+
+  <text x="404" y="526" font-family="Arial, sans-serif" font-size="24" font-weight="700" fill="#1f2937">Runtime User</text>
+  <rect x="680" y="488" width="650" height="54" rx="12" fill="#f8fafc" stroke="#cbd5e1" stroke-width="2"/>
+  <text x="704" y="522" font-family="Courier New, monospace" font-size="21" fill="#111827">tmuxsvc</text>
+  <text x="680" y="570" font-family="Arial, sans-serif" font-size="19" fill="#6b7280">Recommended: a dedicated low-privilege account.</text>
+
+  <text x="404" y="650" font-family="Arial, sans-serif" font-size="24" font-weight="700" fill="#1f2937">Allowed Sessions</text>
+  <rect x="680" y="612" width="650" height="54" rx="12" fill="#f8fafc" stroke="#cbd5e1" stroke-width="2"/>
+  <text x="704" y="646" font-family="Courier New, monospace" font-size="21" fill="#111827">agent-main,repo-main</text>
+  <text x="680" y="694" font-family="Arial, sans-serif" font-size="19" fill="#6b7280">Comma-separated allowlist for named tmux sessions.</text>
+
+  <rect x="360" y="796" width="242" height="60" rx="14" fill="#234a3b"/>
+  <text x="402" y="834" font-family="Arial, sans-serif" font-size="23" font-weight="700" fill="#ffffff">Save Demo Settings</text>
+
+  <rect x="632" y="786" width="788" height="96" rx="18" fill="#fff7ed" stroke="#fdba74" stroke-width="3"/>
+  <text x="664" y="826" font-family="Arial, sans-serif" font-size="21" font-weight="700" fill="#9a3412">Demo note</text>
+  <text x="664" y="858" font-family="Arial, sans-serif" font-size="19" fill="#9a3412">This public plugin shows configuration shape only. It does not ship a production bridge.</text>
 </svg>

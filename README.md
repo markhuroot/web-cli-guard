@@ -213,7 +213,7 @@ Once you add real images under `assets/screenshots/`, the section below can act 
 
 ### WordPress Settings Page
 
-![WordPress settings page for bridge URL, runtime user, and allowed sessions](./assets/screenshots/wp-settings-page.svg)
+![WordPress settings page for bridge URL, runtime user, and allowed sessions](./assets/screenshots/wp-settings-page.png)
 
 ### Plain PHP Demo
 
