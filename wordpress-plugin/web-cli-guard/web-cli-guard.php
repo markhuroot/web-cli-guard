@@ -19,11 +19,17 @@ final class WebCliGuardPlugin
     private const NONCE_ACTION = 'wcg_demo_console';
     private const STATE_PREFIX = 'wcg_demo_state_';
     private const STATE_TTL = 3600;
+    private const OPTION_BRIDGE_URL = 'wcg_demo_bridge_url';
+    private const OPTION_BRIDGE_TOKEN = 'wcg_demo_bridge_token';
+    private const OPTION_RUNTIME_USER = 'wcg_demo_runtime_user';
+    private const OPTION_ALLOWED_SESSIONS = 'wcg_demo_allowed_sessions';
 
     public static function init(): void
     {
         add_shortcode(self::SHORTCODE, [self::class, 'render_console_shortcode']);
         add_action('wp_ajax_wcg_demo_console', [self::class, 'handle_demo_console_ajax']);
+        add_action('admin_menu', [self::class, 'register_admin_page']);
+        add_action('admin_init', [self::class, 'register_settings']);
     }
 
     public static function render_console_shortcode(): string
@@ -104,7 +110,7 @@ final class WebCliGuardPlugin
                         </div>
                     </form>
                     <div class="wcg-note">
-                        This demo does not execute real commands. In a production setup, wire the same UI flow to a narrow bridge, a low-privilege runtime user, audit logs, and elevated-command verification.
+                        This demo does not execute real commands. In a production setup, wire the same UI flow to a narrow bridge, a low-privilege runtime user, audit logs, elevated-command verification, and OS-level sandboxing.
                     </div>
                 </div>
             </div>
@@ -288,6 +294,96 @@ final class WebCliGuardPlugin
         wp_send_json_error(['message' => 'Unsupported mode.'], 400);
     }
 
+    public static function register_admin_page(): void
+    {
+        add_options_page(
+            'Web CLI Guard',
+            'Web CLI Guard',
+            self::CAPABILITY,
+            'web-cli-guard',
+            [self::class, 'render_admin_page']
+        );
+    }
+
+    public static function register_settings(): void
+    {
+        register_setting('wcg_demo_settings', self::OPTION_BRIDGE_URL, [
+            'type' => 'string',
+            'sanitize_callback' => 'esc_url_raw',
+            'default' => 'http://127.0.0.1:47631',
+        ]);
+        register_setting('wcg_demo_settings', self::OPTION_BRIDGE_TOKEN, [
+            'type' => 'string',
+            'sanitize_callback' => [self::class, 'sanitize_token'],
+            'default' => 'replace-this-token',
+        ]);
+        register_setting('wcg_demo_settings', self::OPTION_RUNTIME_USER, [
+            'type' => 'string',
+            'sanitize_callback' => [self::class, 'sanitize_runtime_user'],
+            'default' => 'tmuxsvc',
+        ]);
+        register_setting('wcg_demo_settings', self::OPTION_ALLOWED_SESSIONS, [
+            'type' => 'string',
+            'sanitize_callback' => [self::class, 'sanitize_sessions_csv'],
+            'default' => 'agent-main,repo-main',
+        ]);
+    }
+
+    public static function render_admin_page(): void
+    {
+        if (!current_user_can(self::CAPABILITY)) {
+            wp_die('You do not have permission to access this page.');
+        }
+
+        $bridgeUrl = (string) get_option(self::OPTION_BRIDGE_URL, 'http://127.0.0.1:47631');
+        $bridgeToken = (string) get_option(self::OPTION_BRIDGE_TOKEN, 'replace-this-token');
+        $runtimeUser = (string) get_option(self::OPTION_RUNTIME_USER, 'tmuxsvc');
+        $allowedSessions = (string) get_option(self::OPTION_ALLOWED_SESSIONS, 'agent-main,repo-main');
+        ?>
+        <div class="wrap">
+            <h1>Web CLI Guard</h1>
+            <p>This settings page is part of the public demo. It shows the configuration shape for a real bridge-backed deployment without shipping a production bridge in the plugin itself.</p>
+            <form method="post" action="options.php">
+                <?php settings_fields('wcg_demo_settings'); ?>
+                <table class="form-table" role="presentation">
+                    <tr>
+                        <th scope="row"><label for="wcg-demo-bridge-url">Bridge URL</label></th>
+                        <td>
+                            <input id="wcg-demo-bridge-url" name="<?php echo esc_attr(self::OPTION_BRIDGE_URL); ?>" type="url" class="regular-text code" value="<?php echo esc_attr($bridgeUrl); ?>">
+                            <p class="description">Example: `http://127.0.0.1:47631`</p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th scope="row"><label for="wcg-demo-bridge-token">Bridge Token</label></th>
+                        <td>
+                            <input id="wcg-demo-bridge-token" name="<?php echo esc_attr(self::OPTION_BRIDGE_TOKEN); ?>" type="text" class="regular-text code" value="<?php echo esc_attr($bridgeToken); ?>">
+                            <p class="description">Use an environment-specific secret outside version control in real deployments.</p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th scope="row"><label for="wcg-demo-runtime-user">Runtime User</label></th>
+                        <td>
+                            <input id="wcg-demo-runtime-user" name="<?php echo esc_attr(self::OPTION_RUNTIME_USER); ?>" type="text" class="regular-text code" value="<?php echo esc_attr($runtimeUser); ?>">
+                            <p class="description">Recommended: a dedicated low-privilege account such as `tmuxsvc`.</p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th scope="row"><label for="wcg-demo-allowed-sessions">Allowed Sessions</label></th>
+                        <td>
+                            <input id="wcg-demo-allowed-sessions" name="<?php echo esc_attr(self::OPTION_ALLOWED_SESSIONS); ?>" type="text" class="regular-text code" value="<?php echo esc_attr($allowedSessions); ?>">
+                            <p class="description">Comma-separated allowlist such as `agent-main,repo-main`.</p>
+                        </td>
+                    </tr>
+                </table>
+                <?php submit_button('Save Demo Settings'); ?>
+            </form>
+            <div style="margin-top:18px;padding:14px 16px;border:1px solid #fed7aa;border-radius:14px;background:#fff7ed;color:#9a3412;max-width:860px;">
+                The demo console still simulates commands locally in WordPress. These settings are meant to illustrate how a real bridge-backed deployment would be configured.
+            </div>
+        </div>
+        <?php
+    }
+
     private static function get_demo_sessions(): array
     {
         return [
@@ -429,6 +525,30 @@ final class WebCliGuardPlugin
         return $session === 'repo-main'
             ? 'tmuxsvc-demo@repo:/srv/web-cli-guard/repo$ '
             : 'tmuxsvc-demo@agent:/srv/web-cli-guard/agent$ ';
+    }
+
+    public static function sanitize_token(string $value): string
+    {
+        return trim(preg_replace('/[^A-Za-z0-9._:-]/', '', $value) ?? '');
+    }
+
+    public static function sanitize_runtime_user(string $value): string
+    {
+        return trim(preg_replace('/[^A-Za-z0-9._-]/', '', $value) ?? '');
+    }
+
+    public static function sanitize_sessions_csv(string $value): string
+    {
+        $parts = array_filter(array_map('trim', explode(',', $value)), static function (string $item): bool {
+            return $item !== '';
+        });
+        $parts = array_map(static function (string $item): string {
+            return preg_replace('/[^A-Za-z0-9._:-]/', '', $item) ?? '';
+        }, $parts);
+        $parts = array_values(array_filter($parts, static function (string $item): bool {
+            return $item !== '';
+        }));
+        return implode(',', array_unique($parts));
     }
 }
 

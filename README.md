@@ -11,8 +11,6 @@ It is built around a practical pattern:
 - OTP or approval for elevated commands
 - an optional WordPress-based operator UI
 
-This repository is intentionally clean-room. It does not contain DreamJTech credentials, internal hosts, LDAP settings, API keys, or production tokens.
-
 ## Why This Exists
 
 A lot of teams already use CLI-native tools such as:
@@ -23,6 +21,14 @@ A lot of teams already use CLI-native tools such as:
 - repo-specific scripts
 
 The difficult part is not the CLI itself. The difficult part is giving people a usable web entrypoint without falling back to a raw unrestricted web terminal.
+
+Done well, this pattern lets operators:
+
+- inspect current AI CLI work from the web
+- review ongoing session output without SSH
+- use a safer remote-operations surface than a generic web shell
+- rely on OS-level least privilege and sandbox boundaries
+- add approval or OTP before elevated actions
 
 This project documents one opinionated approach:
 
@@ -41,7 +47,8 @@ Included today:
 - architecture and security docs
 - example `systemd` units
 - example helper scripts
-- a minimal WordPress plugin scaffold
+- a WordPress plugin demo with an interactive safe console
+- a WordPress settings-page demo for bridge/runtime configuration
 
 Not included yet:
 
@@ -82,11 +89,15 @@ Recommended baseline:
 
 See [SECURITY.md](./SECURITY.md) for the operational model.
 
+In other words, the goal is not to make the browser powerful. The goal is to make the browser a controlled window into an already-restricted runtime.
+
 ## Typical Architecture
 
 `Browser -> Web App -> Narrow Bridge -> tmux -> CLI Process`
 
 The browser should never execute shell commands directly.
+
+This architecture is useful when you want web-based visibility into an AI CLI session while still keeping actual execution inside a constrained OS account or sandboxed environment.
 
 The web app should:
 
@@ -111,6 +122,13 @@ This repository includes a minimal WordPress plugin scaffold because many teams 
 - a familiar admin or portal surface
 
 The plugin in this repo is intentionally minimal. It is meant as a clean public starting point, not a direct dump of an internal production portal.
+
+The current public demo plugin now shows:
+
+- session switching
+- line-console style output
+- simulated command send flow
+- a configuration page for bridge/runtime values
 
 ## Good Fit
 

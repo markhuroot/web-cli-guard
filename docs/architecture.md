@@ -4,6 +4,14 @@
 
 `Web CLI Guard` exposes an existing CLI tool through a controlled web console.
 
+The main product idea is not "web shell first". The main idea is:
+
+- use the web to inspect current AI CLI work
+- keep long-running CLI sessions observable
+- allow selected remote operations
+- preserve safety by relying on OS-level least privilege
+- add extra verification on top for elevated actions
+
 The design is:
 
 `Browser -> Web App -> Narrow Bridge -> tmux -> CLI Process`
@@ -22,6 +30,8 @@ The browser should provide:
 - operator-visible audit/log feedback
 
 The browser should not talk to `tmux` directly.
+
+The browser is best treated as an operator dashboard and interaction layer, not as the primary execution environment.
 
 ## 2. Web App
 
@@ -83,6 +93,8 @@ This user should:
 - have no `sudo`
 - have a narrow writable surface
 - have a controlled home/config directory
+
+This is where the meaningful sandbox boundary lives. If the runtime user cannot write to a path or invoke privileged tooling, the web-exposed CLI should not be able to do so either.
 
 ## 6. Audit + Locking
 

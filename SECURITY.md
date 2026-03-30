@@ -13,6 +13,8 @@ The real boundary should be:
 - limited network reach
 - narrow `tmux` bridge commands
 
+This design is especially useful when you want operators to inspect or steer AI CLI work from a browser while keeping the real execution inside an OS-level sandbox boundary.
+
 ## Minimum Safe Defaults
 
 - Use a dedicated OS account such as `tmuxsvc`
@@ -52,6 +54,8 @@ The real boundary should be:
 - protection against every dangerous command variant
 - protection from a compromised WordPress admin account
 - protection from a privileged local attacker
+
+`tmux` improves persistence and observability. It does not replace OS sandboxing, container isolation, or hard permission boundaries.
 
 ## Secret Handling
 

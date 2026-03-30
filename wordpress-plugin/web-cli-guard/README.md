@@ -1,4 +1,4 @@
-# WordPress Plugin Scaffold
+# WordPress Plugin Demo
 
 This folder contains a WordPress demo plugin for a web-based CLI console.
 
@@ -11,6 +11,7 @@ What it demonstrates now:
 - AJAX-powered line console refresh
 - text send and restricted key buttons
 - demo session persistence per logged-in user with transients
+- a settings page for bridge/runtime configuration placeholders
 - security notes in UI
 
 What it does not yet ship:
