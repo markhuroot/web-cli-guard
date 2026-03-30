@@ -49,6 +49,7 @@ Included today:
 - example helper scripts
 - a WordPress plugin demo with an interactive safe console
 - a WordPress settings-page demo for bridge/runtime configuration
+- a plain PHP interactive safe demo
 
 Not included yet:
 
@@ -73,6 +74,8 @@ Not included yet:
   Example bootstrap/helper scripts
 - `wordpress-plugin/web-cli-guard/`
   Minimal WordPress plugin starter
+- `php-demo/`
+  Framework-agnostic PHP demo with no WordPress dependency
 
 ## Security Model
 

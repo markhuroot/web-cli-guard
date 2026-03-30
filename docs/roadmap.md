@@ -25,7 +25,7 @@
 
 - packaged installation guide
 - Docker example for non-production testing
-- framework-agnostic PHP example
+- richer framework-agnostic PHP example
 
 ## Nice-to-have
 
