@@ -1,0 +1,8 @@
+.DS_Store
+*.log
+*.sqlite
+*.db
+.env
+.env.local
+node_modules/
+vendor/

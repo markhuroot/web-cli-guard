@@ -1,0 +1,21 @@
+[Unit]
+Description=Example shared tmux server for Web CLI Guard
+After=network.target
+
+[Service]
+Type=oneshot
+User=tmuxsvc
+Group=tmuxsvc
+RemainAfterExit=yes
+Environment=TMUX_SOCKET_DIR=/var/lib/web-cli-guard-tmux
+Environment=TMUX_SOCKET_PATH=/var/lib/web-cli-guard-tmux/default.sock
+Environment=TMUX_SESSION_NAME=agent-main
+Environment=TMUX_SESSION_WORKDIR=/srv/web-cli-guard/workdir
+Environment=TMUX_SESSION_SHELL=/bin/bash
+Environment=TMUX_WEB_USER=www-data
+ExecStart=/usr/local/bin/web-cli-guard-bootstrap
+ExecReload=/usr/local/bin/web-cli-guard-bootstrap
+ExecStop=/usr/local/bin/web-cli-guard-tmuxctl kill-server
+
+[Install]
+WantedBy=multi-user.target

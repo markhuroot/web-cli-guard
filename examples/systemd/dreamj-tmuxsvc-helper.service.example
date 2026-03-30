@@ -1,0 +1,22 @@
+[Unit]
+Description=Example localhost tmux helper for Web CLI Guard
+After=network.target dreamj-tmuxsvc.service
+
+[Service]
+Type=simple
+User=tmuxsvc
+Group=tmuxsvc
+Environment=TMUX_SOCKET_PATH=/var/lib/web-cli-guard-tmux/default.sock
+Environment=TMUX_SESSION_NAME=agent-main
+Environment=TMUX_SESSION_WORKDIR=/srv/web-cli-guard/workdir
+Environment=TMUX_SESSION_SHELL=/bin/bash
+Environment=TMUX_LOG_DIR=/var/lib/web-cli-guard-tmux/logs
+Environment=TMUX_HELPER_HOST=127.0.0.1
+Environment=TMUX_HELPER_PORT=47631
+Environment=TMUX_HELPER_TOKEN=replace-this-token
+ExecStart=/usr/local/bin/web-cli-guard-helper
+Restart=always
+RestartSec=2
+
+[Install]
+WantedBy=multi-user.target
