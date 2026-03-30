@@ -209,7 +209,7 @@ Once you add real images under `assets/screenshots/`, the section below can act 
 
 ### WordPress Demo Console
 
-![WordPress demo console showing web-based visibility into an AI CLI session](./assets/screenshots/wp-demo-console.svg)
+![WordPress demo console showing web-based visibility into an AI CLI session](./assets/screenshots/wp-demo-console.png)
 
 ### WordPress Settings Page
 
@@ -217,11 +217,11 @@ Once you add real images under `assets/screenshots/`, the section below can act 
 
 ### Plain PHP Demo
 
-![Plain PHP demo console for a tmux-backed AI CLI operator flow](./assets/screenshots/php-demo-console.svg)
+![Plain PHP demo console for a tmux-backed AI CLI operator flow](./assets/screenshots/php-demo-console.png)
 
 ### Approval Flow
 
-![Approval or OTP flow for elevated remote actions](./assets/screenshots/approval-flow.svg)
+![Approval or OTP flow for elevated remote actions](./assets/screenshots/approval-flow.png)
 
 ## First Release Draft
 
