@@ -1,5 +1,7 @@
 # Web CLI Guard
 
+English | [繁體中文](./README.zh-TW.md)
+
 Web CLI Guard is a small open-source starter for putting existing CLI tools behind a controlled web interface.
 
 It is meant for teams that want to view or operate an existing AI CLI workflow from the web without exposing a raw unrestricted shell.
