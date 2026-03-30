@@ -201,6 +201,7 @@ If you publish this repo, the most useful first screenshots are:
 
 See [screenshots.md](./docs/screenshots.md) for suggested captions and what to avoid revealing.
 Use [screenshot-checklist.md](./docs/screenshot-checklist.md) for filenames and export steps.
+Use [screenshot-shot-plan.md](./docs/screenshot-shot-plan.md) for the exact first-pass capture plan.
 
 ## Screenshot Slots
 
