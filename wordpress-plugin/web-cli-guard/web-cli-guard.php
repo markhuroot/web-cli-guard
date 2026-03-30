@@ -28,6 +28,7 @@ final class WebCliGuardPlugin
     {
         add_shortcode(self::SHORTCODE, [self::class, 'render_console_shortcode']);
         add_action('wp_ajax_wcg_demo_console', [self::class, 'handle_demo_console_ajax']);
+        add_action('wp_ajax_wcg_demo_bridge_test', [self::class, 'handle_bridge_test_ajax']);
         add_action('admin_menu', [self::class, 'register_admin_page']);
         add_action('admin_init', [self::class, 'register_settings']);
     }
@@ -420,11 +421,97 @@ final class WebCliGuardPlugin
                 </table>
                 <?php submit_button('Save Demo Settings'); ?>
             </form>
+            <div style="margin-top:18px;padding:16px;border:1px solid #d7dee8;border-radius:14px;background:#fbfdff;max-width:860px;">
+                <h2 style="margin:0 0 10px;font-size:18px;">Bridge Check</h2>
+                <p style="margin:0 0 12px;color:#516072;">Test whether the configured bridge URL and token can reach the bridge health endpoint and list allowed sessions.</p>
+                <button type="button" class="button button-secondary" id="wcg-demo-bridge-test">Test Bridge Connection</button>
+                <div id="wcg-demo-bridge-test-result" style="margin-top:12px;color:#334155;"></div>
+            </div>
             <div style="margin-top:18px;padding:14px 16px;border:1px solid #fed7aa;border-radius:14px;background:#fff7ed;color:#9a3412;max-width:860px;">
                 If bridge settings are valid, the public demo console can switch from local simulation to real bridge-backed session capture and send actions. OTP, approval, and command classification should still stay in the web layer.
             </div>
+            <script>
+                (function () {
+                    var button = document.getElementById('wcg-demo-bridge-test');
+                    var resultNode = document.getElementById('wcg-demo-bridge-test-result');
+                    if (!button || !resultNode) {
+                        return;
+                    }
+
+                    button.addEventListener('click', function () {
+                        button.disabled = true;
+                        resultNode.textContent = 'Testing bridge...';
+
+                        var body = new URLSearchParams({
+                            action: 'wcg_demo_bridge_test',
+                            _ajax_nonce: <?php echo wp_json_encode(wp_create_nonce(self::NONCE_ACTION)); ?>
+                        });
+
+                        fetch(ajaxurl, {
+                            method: 'POST',
+                            credentials: 'same-origin',
+                            headers: {'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'},
+                            body: body.toString()
+                        }).then(function (response) {
+                            return response.json();
+                        }).then(function (json) {
+                            if (!(json && json.success && json.data)) {
+                                throw new Error(json && json.data && json.data.message ? json.data.message : 'Bridge test failed');
+                            }
+                            var details = [
+                                'Bridge OK',
+                                'Service: ' + String(json.data.service || 'unknown'),
+                                'Sessions: ' + String(json.data.session_count || 0),
+                                'Names: ' + String((json.data.session_names || []).join(', ') || '(none)')
+                            ];
+                            resultNode.textContent = details.join(' | ');
+                        }).catch(function (error) {
+                            resultNode.textContent = error && error.message ? error.message : 'Bridge test failed';
+                        }).finally(function () {
+                            button.disabled = false;
+                        });
+                    });
+                }());
+            </script>
         </div>
         <?php
+    }
+
+    public static function handle_bridge_test_ajax(): void
+    {
+        if (!current_user_can(self::CAPABILITY)) {
+            wp_send_json_error(['message' => 'Permission denied.'], 403);
+        }
+        if (!check_ajax_referer(self::NONCE_ACTION, '_ajax_nonce', false)) {
+            wp_send_json_error(['message' => 'Invalid nonce.'], 403);
+        }
+        if (!self::is_bridge_enabled()) {
+            wp_send_json_error(['message' => 'Bridge URL and token are required first.'], 400);
+        }
+
+        $health = self::bridge_try_request('GET', '/health');
+        if (!is_array($health)) {
+            wp_send_json_error(['message' => 'Bridge health check failed.'], 502);
+        }
+
+        $sessions = self::bridge_try_request('GET', '/sessions');
+        if (!is_array($sessions)) {
+            wp_send_json_error(['message' => 'Bridge session listing failed.'], 502);
+        }
+
+        $sessionNames = [];
+        foreach ((array) ($sessions['sessions'] ?? []) as $item) {
+            $name = trim((string) ($item['name'] ?? ''));
+            if ($name !== '') {
+                $sessionNames[] = $name;
+            }
+        }
+
+        wp_send_json_success([
+            'service' => (string) ($health['service'] ?? 'web-cli-guard-python-bridge'),
+            'session_count' => count($sessionNames),
+            'session_names' => $sessionNames,
+        ]);
     }
 
     private static function get_demo_sessions(): array
