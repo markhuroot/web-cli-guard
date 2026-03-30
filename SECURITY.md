@@ -1,5 +1,7 @@
 # Security Notes
 
+English | [繁體中文](./SECURITY.zh-TW.md)
+
 `Web CLI Guard` is meant to reduce operational risk, not eliminate it.
 
 ## Core Principle

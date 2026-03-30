@@ -1,5 +1,7 @@
 # Architecture
 
+English | [繁體中文](./architecture.zh-TW.md)
+
 ## Summary
 
 `Web CLI Guard` exposes an existing CLI tool through a controlled web console.
