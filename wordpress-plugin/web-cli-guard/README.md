@@ -1,21 +1,25 @@
 # WordPress Plugin Scaffold
 
-This folder contains a minimal WordPress plugin starter for a web-based CLI console.
+This folder contains a WordPress demo plugin for a web-based CLI console.
 
 It is intentionally small and generic.
 
-What it demonstrates:
+What it demonstrates now:
 
 - shortcode-driven console shell
-- session selector placeholder
-- line console placeholder
+- session switching
+- AJAX-powered line console refresh
+- text send and restricted key buttons
+- demo session persistence per logged-in user with transients
 - security notes in UI
 
 What it does not yet ship:
 
 - a production bridge
-- real command execution
+- real shell execution
 - OTP backend wiring
-- persistence or role-management UI
+- role-management UI
 
-Use this as a clean starting point for a public plugin package.
+The plugin is intentionally safe by default: commands are simulated and appended to demo output, not executed on the host.
+
+Use this as a clean starting point for a public plugin package or a documentation demo.
