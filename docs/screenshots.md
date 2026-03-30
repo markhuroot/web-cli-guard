@@ -30,6 +30,16 @@ Plain PHP demo
 
 Framework-agnostic PHP demo that reproduces the same operator flow without requiring WordPress.
 
+## Suggested Screenshot 4
+
+### Title
+
+Approval or OTP flow
+
+### Caption
+
+Example step-up verification flow for elevated commands, showing how a web operator can request sensitive actions while still requiring a second approval layer.
+
 ## Avoid Showing
 
 - real tokens

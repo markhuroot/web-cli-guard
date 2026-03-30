@@ -2,6 +2,8 @@
 
 Web CLI Guard is a small open-source starter for putting existing CLI tools behind a controlled web interface.
 
+It is meant for teams that want to view or operate an existing AI CLI workflow from the web without exposing a raw unrestricted shell.
+
 It is built around a practical pattern:
 
 - `tmux` for persistent sessions
@@ -25,7 +27,9 @@ The difficult part is not the CLI itself. The difficult part is giving people a 
 Done well, this pattern lets operators:
 
 - inspect current AI CLI work from the web
+- check what an AI agent is currently doing while away from the server
 - review ongoing session output without SSH
+- perform limited remote actions from a browser with approval gates
 - use a safer remote-operations surface than a generic web shell
 - rely on OS-level least privilege and sandbox boundaries
 - add approval or OTP before elevated actions
@@ -37,6 +41,24 @@ This project documents one opinionated approach:
 3. expose only a narrow web bridge
 4. add audit logs and per-session locking
 5. require extra verification for elevated commands
+
+## About
+
+Web CLI Guard is best understood as a controlled operator window into an existing CLI runtime.
+
+It can be useful when you want to:
+
+- watch an ongoing `codex`, `claude`, or shell-based AI session from outside the office
+- let staff review current output and send a few allowed commands without direct SSH access
+- keep long-running AI work inside a persistent `tmux` session while exposing only a narrow browser control surface
+- add step-up verification before sensitive actions such as service restarts or privileged maintenance tasks
+- combine web authentication, operator audit trails, and OS-level sandboxing into one workflow
+
+The core idea is simple:
+
+- the browser is for visibility and controlled input
+- the OS account or sandbox is the real execution boundary
+- elevated actions should require extra verification, not blind trust in the UI
 
 ## Scope
 
@@ -138,6 +160,8 @@ The current public demo plugin now shows:
 - internal engineering consoles
 - support/admin workflows on one or two servers
 - AI CLI access for operators without SSH access
+- remote visibility into ongoing AI-assisted maintenance or investigation work
+- web-based approval layers for sensitive operational commands
 - organizations that want auditability and approval gates
 
 ## Bad Fit
@@ -173,12 +197,17 @@ If you publish this repo, the most useful first screenshots are:
 1. the WordPress demo console
 2. the WordPress settings page
 3. the plain PHP demo console
+4. an example operator flow with elevated-command verification or approval
 
 See [screenshots.md](./docs/screenshots.md) for suggested captions and what to avoid revealing.
 
 ## First Release Draft
 
 For a suggested first GitHub release note, see [release-notes-v0.1.md](./docs/release-notes-v0.1.md).
+
+## Suggested GitHub About
+
+Repository description and topics are suggested in [github-publish-notes.md](./docs/github-publish-notes.md).
 
 ## Push Template
 

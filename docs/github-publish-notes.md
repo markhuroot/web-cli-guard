@@ -8,6 +8,17 @@
 
 - Controlled web console for tmux-backed AI CLI tools with low-privilege runtime, audit logs, and elevated-command verification patterns.
 
+## Suggested About Text
+
+Use this project when you want a browser-based way to inspect or lightly operate an existing AI CLI session while keeping the real execution boundary in a low-privilege OS account, tmux session, or sandbox.
+
+Good examples:
+
+- watching ongoing `codex` or `claude` work from outside the server
+- giving staff a safer remote operations surface than direct shell access
+- adding OTP or approval before elevated commands
+- combining web authentication, audit logs, and OS-level least privilege
+
 ## Suggested Topics
 
 - `tmux`
@@ -39,6 +50,7 @@ Do not market the first release as:
 - WordPress demo console
 - plain PHP demo console
 - settings page showing bridge/runtime fields
+- approval or elevated-command verification flow
 
 Make sure screenshots do not reveal:
 
