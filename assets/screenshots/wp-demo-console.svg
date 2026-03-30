@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="720" viewBox="0 0 1280 720" role="img" aria-labelledby="title desc">
+  <title id="title">WordPress Demo Console Placeholder</title>
+  <desc id="desc">Placeholder image for the WordPress demo console screenshot.</desc>
+  <rect width="1280" height="720" fill="#f3f0e8"/>
+  <rect x="64" y="56" width="1152" height="608" rx="24" fill="#fffdf8" stroke="#1f2937" stroke-width="4"/>
+  <rect x="64" y="56" width="1152" height="72" rx="24" fill="#234a3b"/>
+  <circle cx="112" cy="92" r="10" fill="#f2c14e"/>
+  <circle cx="146" cy="92" r="10" fill="#f78154"/>
+  <circle cx="180" cy="92" r="10" fill="#7bc96f"/>
+  <text x="214" y="101" font-family="Arial, sans-serif" font-size="28" fill="#ffffff">WordPress Demo Console</text>
+  <rect x="116" y="170" width="220" height="412" rx="16" fill="#f7f3ea" stroke="#234a3b" stroke-width="3"/>
+  <rect x="372" y="170" width="744" height="320" rx="16" fill="#111827"/>
+  <rect x="372" y="516" width="744" height="66" rx="12" fill="#ece7da" stroke="#1f2937" stroke-width="3"/>
+  <text x="140" y="224" font-family="Arial, sans-serif" font-size="26" fill="#234a3b">Sessions</text>
+  <text x="140" y="272" font-family="Arial, sans-serif" font-size="22" fill="#1f2937">svr-main</text>
+  <text x="140" y="316" font-family="Arial, sans-serif" font-size="22" fill="#1f2937">www-main</text>
+  <text x="404" y="220" font-family="Courier New, monospace" font-size="24" fill="#93c5fd">$ codex</text>
+  <text x="404" y="262" font-family="Courier New, monospace" font-size="22" fill="#e5e7eb">OpenAI Codex</text>
+  <text x="404" y="304" font-family="Courier New, monospace" font-size="22" fill="#e5e7eb">model: gpt-5.4</text>
+  <text x="404" y="346" font-family="Courier New, monospace" font-size="22" fill="#e5e7eb">session: svr-main</text>
+  <text x="404" y="558" font-family="Arial, sans-serif" font-size="24" fill="#1f2937">Placeholder screenshot. Replace with a real capture.</text>
+</svg>

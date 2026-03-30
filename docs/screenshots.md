@@ -1,5 +1,7 @@
 # Screenshot Guide
 
+Put final exported images in `assets/screenshots/`. For exact filenames and a quick publishing checklist, see [screenshot-checklist.md](./screenshot-checklist.md).
+
 ## Suggested Screenshot 1
 
 ### Title

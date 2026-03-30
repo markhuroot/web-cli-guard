@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="720" viewBox="0 0 1280 720" role="img" aria-labelledby="title desc">
+  <title id="title">PHP Demo Placeholder</title>
+  <desc id="desc">Placeholder image for the plain PHP demo screenshot.</desc>
+  <rect width="1280" height="720" fill="#eef2f7"/>
+  <rect x="84" y="56" width="1112" height="608" rx="24" fill="#fbfcfe" stroke="#1f2937" stroke-width="4"/>
+  <rect x="84" y="56" width="1112" height="72" rx="24" fill="#1e3a5f"/>
+  <text x="122" y="101" font-family="Arial, sans-serif" font-size="30" fill="#ffffff">Plain PHP Demo Console</text>
+  <rect x="122" y="166" width="1036" height="316" rx="18" fill="#0f172a"/>
+  <rect x="122" y="510" width="500" height="94" rx="16" fill="#e7edf4" stroke="#1e3a5f" stroke-width="3"/>
+  <rect x="658" y="510" width="500" height="94" rx="16" fill="#e7edf4" stroke="#1e3a5f" stroke-width="3"/>
+  <text x="154" y="218" font-family="Courier New, monospace" font-size="22" fill="#93c5fd">Session: php-demo</text>
+  <text x="154" y="258" font-family="Courier New, monospace" font-size="22" fill="#e5e7eb">Status: connected</text>
+  <text x="154" y="298" font-family="Courier New, monospace" font-size="22" fill="#e5e7eb">Command: status</text>
+  <text x="154" y="338" font-family="Courier New, monospace" font-size="22" fill="#e5e7eb">Output: demo bridge only</text>
+  <text x="158" y="564" font-family="Arial, sans-serif" font-size="24" fill="#1f2937">No WordPress dependency</text>
+  <text x="694" y="564" font-family="Arial, sans-serif" font-size="24" fill="#1f2937">Placeholder screenshot</text>
+</svg>

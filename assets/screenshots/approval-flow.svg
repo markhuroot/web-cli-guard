@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="720" viewBox="0 0 1280 720" role="img" aria-labelledby="title desc">
+  <title id="title">Approval Flow Placeholder</title>
+  <desc id="desc">Placeholder image for the approval or OTP flow screenshot.</desc>
+  <rect width="1280" height="720" fill="#f7f1eb"/>
+  <rect x="82" y="54" width="1116" height="612" rx="24" fill="#fffdf9" stroke="#1f2937" stroke-width="4"/>
+  <text x="118" y="108" font-family="Arial, sans-serif" font-size="34" fill="#7a3419">Elevated Command Verification</text>
+  <rect x="118" y="154" width="1044" height="110" rx="18" fill="#fff1d6" stroke="#d97706" stroke-width="3"/>
+  <text x="152" y="214" font-family="Arial, sans-serif" font-size="28" fill="#7c2d12">Requested action: systemctl restart example.service</text>
+  <rect x="118" y="308" width="480" height="214" rx="18" fill="#f8fafc" stroke="#1f2937" stroke-width="3"/>
+  <rect x="682" y="308" width="480" height="214" rx="18" fill="#f8fafc" stroke="#1f2937" stroke-width="3"/>
+  <text x="154" y="360" font-family="Arial, sans-serif" font-size="26" fill="#1f2937">Step 1</text>
+  <text x="154" y="402" font-family="Arial, sans-serif" font-size="22" fill="#1f2937">Send OTP or approval request</text>
+  <text x="718" y="360" font-family="Arial, sans-serif" font-size="26" fill="#1f2937">Step 2</text>
+  <text x="718" y="402" font-family="Arial, sans-serif" font-size="22" fill="#1f2937">Enter code and release command</text>
+  <text x="362" y="592" font-family="Arial, sans-serif" font-size="24" fill="#1f2937">Placeholder screenshot. Replace with a real capture.</text>
+</svg>

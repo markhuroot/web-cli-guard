@@ -200,6 +200,27 @@ If you publish this repo, the most useful first screenshots are:
 4. an example operator flow with elevated-command verification or approval
 
 See [screenshots.md](./docs/screenshots.md) for suggested captions and what to avoid revealing.
+Use [screenshot-checklist.md](./docs/screenshot-checklist.md) for filenames and export steps.
+
+## Screenshot Slots
+
+Once you add real images under `assets/screenshots/`, the section below can act as the GitHub landing gallery.
+
+### WordPress Demo Console
+
+![WordPress demo console showing web-based visibility into an AI CLI session](./assets/screenshots/wp-demo-console.svg)
+
+### WordPress Settings Page
+
+![WordPress settings page for bridge URL, runtime user, and allowed sessions](./assets/screenshots/wp-settings-page.svg)
+
+### Plain PHP Demo
+
+![Plain PHP demo console for a tmux-backed AI CLI operator flow](./assets/screenshots/php-demo-console.svg)
+
+### Approval Flow
+
+![Approval or OTP flow for elevated remote actions](./assets/screenshots/approval-flow.svg)
 
 ## First Release Draft
 
