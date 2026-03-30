@@ -69,11 +69,15 @@ Web CLI Guard 可以理解成「既有 CLI runtime 的受控操作視窗」。
 目前包含：
 
 - 架構與安全文件
+- `docs/bridge-api.md` 的 bridge contract 文件
+- 一個可實際接 `tmux` 的最小 `python-bridge/`
 - `systemd` 範例單元
 - helper script 範例
-- 一個具互動性的 WordPress demo plugin
+- 一個可切換 `demo / bridge` 的 WordPress plugin demo
 - 一個用於 bridge/runtime 設定展示的 WordPress settings page demo
-- 一個不依賴 WordPress 的純 PHP 互動 demo
+- 一個可切換 `demo / bridge` 的純 PHP 互動 demo
+- `quickstart` 與 compose 範例
+- GitHub Actions 基本 CI
 
 目前不包含：
 
@@ -86,6 +90,10 @@ Web CLI Guard 可以理解成「既有 CLI runtime 的受控操作視窗」。
 
 - `docs/architecture.md`
   高階請求流與元件邊界
+- `docs/quickstart.md`
+  從 clone 到 real tmux bridge 的最短路徑
+- `docs/bridge-api.md`
+  狹窄 tmux bridge 的最小 HTTP 契約
 - `docs/threat-model.md`
   這種模式能降低哪些風險，以及不能解決哪些問題
 - `docs/roadmap.md`
@@ -96,6 +104,10 @@ Web CLI Guard 可以理解成「既有 CLI runtime 的受控操作視窗」。
   範例 service units
 - `examples/scripts/`
   範例 bootstrap/helper scripts
+- `examples/docker-compose.yml.example`
+  bridge 的 container 化範例
+- `python-bridge/`
+  使用 Python 標準函式庫實作的最小 real bridge
 - `wordpress-plugin/web-cli-guard/`
   最小 WordPress plugin 起始版
 - `php-demo/`
@@ -154,8 +166,9 @@ bridge 則應該只提供有限指令，例如：
 
 - session 切換
 - line-console 風格輸出
-- 模擬的指令送出流程
+- `demo / bridge` 雙模式指令送出流程
 - bridge/runtime 相關設定頁
+- bridge 連線測試按鈕
 
 ## 適合的場景
 
@@ -176,10 +189,33 @@ bridge 則應該只提供有限指令，例如：
 ## 開始使用
 
 1. 先讀 [architecture.md](./docs/architecture.md)
-2. 再讀 [threat-model.md](./docs/threat-model.md)
-3. 查看 `examples/` 下面的範例檔案
-4. 以 WordPress plugin scaffold 為起點，或自行做 Web UI
-5. 不要把 secrets 放進 repository
+2. 再照 [quickstart.md](./docs/quickstart.md) 跑一次最短流程
+3. 再讀 [bridge-api.md](./docs/bridge-api.md)
+4. 再讀 [threat-model.md](./docs/threat-model.md)
+5. 查看 `examples/` 下面的範例檔案
+6. 先試純 PHP demo、WordPress plugin，或直接跑 `python-bridge/`
+7. 以 WordPress plugin scaffold 為起點，或自行做 Web UI
+8. 不要把 secrets 放進 repository
+
+## 第一個可實際使用的 Bridge
+
+這個 repository 現在已內含一個最小可用的 real bridge，位置在 [`python-bridge/`](./python-bridge/)。
+
+它的定位是讓使用者從：
+
+- 只看 UI demo
+
+往前走到：
+
+- 可實際對 `tmux` 做 session list / capture / send 的 bridge starter
+
+這個 bridge 刻意保持精簡：
+
+- 只使用 Python 標準函式庫
+- 使用 bearer token
+- 使用 session allowlist
+- 提供 `health / sessions / capture / send-text / send-key`
+- 不提供任意 shell execution API
 
 ## 發佈建議
 
@@ -229,6 +265,7 @@ bridge 則應該只提供有限指令，例如：
 
 第一版 release 草稿可參考 [release-notes-v0.1.md](./docs/release-notes-v0.1.md)。
 針對公開版補強的 `v0.1.1` 可參考 [release-notes-v0.1.1.md](./docs/release-notes-v0.1.1.md)。
+第一個 bridge-capable starter 版本可參考 [release-notes-v0.2.0.md](./docs/release-notes-v0.2.0.md)。
 
 ## GitHub About 建議
 
