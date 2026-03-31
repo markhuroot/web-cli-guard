@@ -1,5 +1,7 @@
 # Bridge API
 
+English | [繁體中文](./bridge-api.zh-TW.md)
+
 ## Purpose
 
 This document defines a minimal bridge contract for a tmux-backed web CLI console.

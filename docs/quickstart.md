@@ -1,5 +1,7 @@
 # Quickstart
 
+English | [繁體中文](./quickstart.zh-TW.md)
+
 This is the shortest path from repository clone to a real tmux-backed bridge.
 
 ## Goal
