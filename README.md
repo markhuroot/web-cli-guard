@@ -71,6 +71,7 @@ Included today:
 - architecture and security docs
 - a minimal bridge API contract
 - a minimal Python bridge
+- a minimal Node.js bridge
 - example `systemd` units
 - example helper scripts
 - a WordPress plugin demo with an interactive safe console
@@ -107,6 +108,8 @@ Not included yet:
   Example containerized bridge wrapper
 - `python-bridge/`
   Minimal real tmux bridge implemented with the Python standard library
+- `node-bridge/`
+  Minimal real tmux bridge implemented with the Node.js standard library
 - `node-demo/`
   Zero-dependency Node.js operator UI demo
 - `wordpress-plugin/web-cli-guard/`
@@ -235,7 +238,7 @@ The point of `web-cli-guard` is to provide one practical pattern for safely reac
 
 ## First Runtime Bridge
 
-This repository now includes a small real bridge example under [`python-bridge/`](./python-bridge/).
+This repository now includes small real bridge examples under [`python-bridge/`](./python-bridge/) and [`node-bridge/`](./node-bridge/).
 
 It is useful when you want to move from:
 
@@ -248,6 +251,7 @@ to:
 The example stays intentionally small:
 
 - Python standard library only
+- Node.js standard library only
 - bearer-token protected
 - session allowlist based
 - `list-sessions`, `capture-pane`, `send-text`, `send-key`

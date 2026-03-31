@@ -1,0 +1,9 @@
+{
+  "name": "web-cli-guard-node-bridge",
+  "private": true,
+  "version": "0.1.0",
+  "description": "Minimal tmux bridge for Web CLI Guard using the Node.js standard library",
+  "scripts": {
+    "start": "node server.js"
+  }
+}

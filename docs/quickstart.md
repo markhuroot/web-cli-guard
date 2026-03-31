@@ -67,6 +67,17 @@ python3 python-bridge/server.py \
   --allow-session repo-main
 ```
 
+If you prefer Node.js instead, the repository also includes:
+
+```bash
+node node-bridge/server.js \
+  --host 127.0.0.1 \
+  --port 8766 \
+  --token change-me \
+  --socket /var/lib/web-cli-guard-tmux/default.sock \
+  --allow-session agent-main
+```
+
 ## 5. Verify the Bridge
 
 Check health:

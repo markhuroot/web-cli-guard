@@ -71,6 +71,7 @@ Web CLI Guard 可以理解成「既有 CLI runtime 的受控操作視窗」。
 - 架構與安全文件
 - `docs/bridge-api.md` 的 bridge contract 文件
 - 一個可實際接 `tmux` 的最小 `python-bridge/`
+- 一個可實際接 `tmux` 的最小 `node-bridge/`
 - `systemd` 範例單元
 - helper script 範例
 - 一個可切換 `demo / bridge` 的 WordPress plugin demo
@@ -109,6 +110,8 @@ Web CLI Guard 可以理解成「既有 CLI runtime 的受控操作視窗」。
   bridge 的 container 化範例
 - `python-bridge/`
   使用 Python 標準函式庫實作的最小 real bridge
+- `node-bridge/`
+  使用 Node.js 標準函式庫實作的最小 real bridge
 - `node-demo/`
   零依賴的 Node.js 操作介面 demo
 - `wordpress-plugin/web-cli-guard/`
@@ -238,7 +241,7 @@ bridge 則應該只提供有限指令，例如：
 
 ## 第一個可實際使用的 Bridge
 
-這個 repository 現在已內含一個最小可用的 real bridge，位置在 [`python-bridge/`](./python-bridge/)。
+這個 repository 現在已內含最小可用的 real bridge，位置在 [`python-bridge/`](./python-bridge/) 與 [`node-bridge/`](./node-bridge/)。
 
 它的定位是讓使用者從：
 
@@ -250,7 +253,7 @@ bridge 則應該只提供有限指令，例如：
 
 這個 bridge 刻意保持精簡：
 
-- 只使用 Python 標準函式庫
+- 只使用 Python 或 Node.js 標準函式庫
 - 使用 bearer token
 - 使用 session allowlist
 - 提供 `health / sessions / capture / send-text / send-key`

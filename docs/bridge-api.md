@@ -199,4 +199,4 @@ The public demo plugin and PHP demo in this repository do not call a real bridge
 
 They are meant to show the operator flow and UI shape first.
 
-The `python-bridge/` example is the first minimal runtime-facing bridge included in this repository.
+The `python-bridge/` and `node-bridge/` examples are minimal runtime-facing bridges included in this repository.
