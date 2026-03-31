@@ -76,6 +76,7 @@ Web CLI Guard 可以理解成「既有 CLI runtime 的受控操作視窗」。
 - 一個可切換 `demo / bridge` 的 WordPress plugin demo
 - 一個用於 bridge/runtime 設定展示的 WordPress settings page demo
 - 一個可切換 `demo / bridge` 的純 PHP 互動 demo
+- 一個零依賴的 Node.js 互動 demo
 - `quickstart` 與 compose 範例
 - GitHub Actions 基本 CI
 
@@ -108,6 +109,8 @@ Web CLI Guard 可以理解成「既有 CLI runtime 的受控操作視窗」。
   bridge 的 container 化範例
 - `python-bridge/`
   使用 Python 標準函式庫實作的最小 real bridge
+- `node-demo/`
+  零依賴的 Node.js 操作介面 demo
 - `wordpress-plugin/web-cli-guard/`
   最小 WordPress plugin 起始版
 - `php-demo/`
@@ -191,6 +194,21 @@ bridge 則應該只提供有限指令，例如：
 - bridge/runtime 相關設定頁
 - bridge 連線測試按鈕
 
+## 隔離模型比較
+
+這個 repository 的定位，主要是提供一種「安全地存取家中、辦公室或內部主機上既有 CLI 環境」的方式。
+
+它不是要取代所有 sandbox 模型。
+
+| 做法 | 主要邊界 | 適合 | 取捨 |
+| --- | --- | --- | --- |
+| 低權限 OS user + `tmux` + narrow bridge | OS 帳號與路徑權限 | 把既有 home/office CLI 環境安全地接到 Web | 維運比較簡單，但不是強多租戶隔離 |
+| 每個 agent / workflow 用 Docker | Container 邊界 | 需要可重複打包、依賴隔離、快速重建 | 比 host-only 更好管理，但仍依賴 container hardening 與 volume/network policy |
+| 每個 agent / trust zone 用 VM | Hypervisor / VM 邊界 | 不同工作負載或團隊間需要較高隔離 | CPU、RAM、映像檔、網路與維運成本都較高 |
+| 只靠工具內建 sandbox | 工具層 policy | 單機、單人、可信環境內快速實驗 | 對遠端多使用者操作來說，通常不夠當主要邊界 |
+
+`web-cli-guard` 的重點，是提供一個可實際落地的遠端 CLI 存取模式，而不是宣稱 `tmux` 本身就是完整沙盒。
+
 ## 適合的場景
 
 - 內部工程控制台
@@ -214,7 +232,7 @@ bridge 則應該只提供有限指令，例如：
 3. 再讀 [bridge-api.md](./docs/bridge-api.md)
 4. 再讀 [threat-model.md](./docs/threat-model.md)
 5. 查看 `examples/` 下面的範例檔案
-6. 先試純 PHP demo、WordPress plugin，或直接跑 `python-bridge/`
+6. 先試 `php-demo/`、`node-demo/`、WordPress plugin，或直接跑 `python-bridge/`
 7. 以 WordPress plugin scaffold 為起點，或自行做 Web UI
 8. 不要把 secrets 放進 repository
 
@@ -253,6 +271,10 @@ bridge 則應該只提供有限指令，例如：
 ### Plain PHP Demo
 
 ![Plain PHP demo console for a tmux-backed AI CLI operator flow](./assets/screenshots/php-demo-console.png)
+
+### Node.js Demo
+
+這個 repository 也包含一個最小的 Node.js 介面 [`node-demo/`](./node-demo/)。它延續與 PHP demo 相同的模式，但對偏好 JavaScript runtime 做內部操作介面的團隊會更順手。
 
 ### Approval Flow
 

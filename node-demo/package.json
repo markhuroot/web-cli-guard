@@ -1,0 +1,9 @@
+{
+  "name": "web-cli-guard-node-demo",
+  "private": true,
+  "version": "0.1.0",
+  "description": "Zero-dependency Node.js demo for Web CLI Guard",
+  "scripts": {
+    "start": "node server.js"
+  }
+}

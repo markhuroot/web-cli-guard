@@ -69,11 +69,14 @@ This repository is a starter, not a finished product.
 Included today:
 
 - architecture and security docs
+- a minimal bridge API contract
+- a minimal Python bridge
 - example `systemd` units
 - example helper scripts
 - a WordPress plugin demo with an interactive safe console
 - a WordPress settings-page demo for bridge/runtime configuration
 - a plain PHP interactive safe demo
+- a zero-dependency Node.js interactive demo
 
 Not included yet:
 
@@ -104,6 +107,8 @@ Not included yet:
   Example containerized bridge wrapper
 - `python-bridge/`
   Minimal real tmux bridge implemented with the Python standard library
+- `node-demo/`
+  Zero-dependency Node.js operator UI demo
 - `wordpress-plugin/web-cli-guard/`
   Minimal WordPress plugin starter
 - `php-demo/`
@@ -181,8 +186,24 @@ The current public demo plugin now shows:
 
 - session switching
 - line-console style output
-- simulated command send flow
+- demo/bridge-aware command flow
 - a configuration page for bridge/runtime values
+- a bridge connection test action
+
+## Isolation Model Comparison
+
+This repository is mainly for controlled access to CLI workflows that already live at home, in the office, or on an internal server.
+
+It is not trying to replace every sandbox model.
+
+| Approach | Main boundary | Good for | Tradeoffs |
+| --- | --- | --- | --- |
+| Low-privilege OS user + `tmux` + narrow bridge | OS account and path permissions | Reaching an existing home/office CLI stack through a controlled web UI | Stronger operational simplicity than full isolation, but not a hard tenant boundary |
+| Docker per agent or per workflow | Container boundary | Repeatable packaging, disposable agent runtimes, dependency isolation | Better packaging than host-only, but still depends on container hardening and volume/network policy |
+| VM per agent or per trust zone | Hypervisor / VM boundary | Higher isolation between workloads or teams | Heavier on CPU, RAM, images, networking, and operations |
+| Built-in tool sandbox only | Tool policy layer | Fast local experimentation inside one trusted environment | Usually not enough on its own for remote multi-user operator access |
+
+The point of `web-cli-guard` is to provide one practical pattern for safely reaching an existing CLI environment, not to claim that `tmux` alone is a sandbox.
 
 ## Good Fit
 
@@ -207,7 +228,8 @@ The current public demo plugin now shows:
 3. Read [bridge-api.md](./docs/bridge-api.md)
 4. Read [threat-model.md](./docs/threat-model.md)
 5. Review the example files under `examples/`
-6. Try the safe UI demos first, or run the minimal Python bridge
+6. Try the safe UI demos first:
+   `php-demo/`, `node-demo/`, or the WordPress plugin
 7. Adapt the WordPress plugin scaffold or build your own web UI
 8. Keep secrets out of the repository
 
@@ -246,6 +268,10 @@ Once you add real images under `assets/screenshots/`, the section below can act 
 ### Plain PHP Demo
 
 ![Plain PHP demo console for a tmux-backed AI CLI operator flow](./assets/screenshots/php-demo-console.png)
+
+### Node.js Demo
+
+The repository also includes a minimal Node.js UI under [`node-demo/`](./node-demo/). It follows the same pattern as the PHP demo, but may fit teams that prefer a small JavaScript runtime over PHP for an internal operator console.
 
 ### Approval Flow
 

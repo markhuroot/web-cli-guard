@@ -9,7 +9,7 @@ At the end of this quickstart, you should have:
 - a real tmux session
 - a local Python bridge bound to `127.0.0.1`
 - an allowlist for one or two session names
-- either the plain PHP demo or the WordPress plugin talking to that bridge
+- either the plain PHP demo, the Node.js demo, or the WordPress plugin talking to that bridge
 
 ## 1. Create a Low-Privilege Runtime User
 
@@ -123,6 +123,23 @@ Then use:
 - the console shortcode UI
 
 If the bridge is unavailable, the public plugin falls back to demo mode.
+
+## 8. Connect the Node.js Demo
+
+Export:
+
+```bash
+export WCG_BRIDGE_URL=http://127.0.0.1:8765
+export WCG_BRIDGE_TOKEN=change-me
+cd node-demo
+node server.js
+```
+
+Open:
+
+`http://127.0.0.1:8090`
+
+This gives you the same operator flow in a small Node.js runtime.
 
 ## Optional: Use systemd
 
