@@ -1,8 +1,12 @@
 #!/usr/bin/env node
 'use strict';
 
+const fs = require('fs');
 const http = require('http');
+const path = require('path');
 const { URL } = require('url');
+
+loadDotEnv();
 
 const HOST = process.env.WCG_NODE_HOST || '127.0.0.1';
 const PORT = Number(process.env.WCG_NODE_PORT || 8090);
@@ -16,6 +20,43 @@ const DEMO_SESSIONS = {
 };
 
 const demoState = new Map();
+
+function loadDotEnv() {
+  const candidates = [
+    path.join(process.cwd(), '.env'),
+    path.join(__dirname, '.env'),
+  ];
+
+  for (const filePath of candidates) {
+    if (!fs.existsSync(filePath)) {
+      continue;
+    }
+    const raw = fs.readFileSync(filePath, 'utf8');
+    for (const line of raw.split(/\r?\n/)) {
+      const trimmed = line.trim();
+      if (!trimmed || trimmed.startsWith('#')) {
+        continue;
+      }
+      const equalIndex = trimmed.indexOf('=');
+      if (equalIndex <= 0) {
+        continue;
+      }
+      const key = trimmed.slice(0, equalIndex).trim();
+      if (!key || Object.prototype.hasOwnProperty.call(process.env, key)) {
+        continue;
+      }
+      let value = trimmed.slice(equalIndex + 1).trim();
+      if (
+        (value.startsWith('"') && value.endsWith('"')) ||
+        (value.startsWith("'") && value.endsWith("'"))
+      ) {
+        value = value.slice(1, -1);
+      }
+      process.env[key] = value;
+    }
+    break;
+  }
+}
 
 function json(res, statusCode, payload) {
   const body = Buffer.from(JSON.stringify(payload));

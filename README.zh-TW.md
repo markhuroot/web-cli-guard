@@ -276,6 +276,8 @@ bridge 則應該只提供有限指令，例如：
 
 這個 repository 也包含一個最小的 Node.js 介面 [`node-demo/`](./node-demo/)。它延續與 PHP demo 相同的模式，但對偏好 JavaScript runtime 做內部操作介面的團隊會更順手。
 
+這個 Node.js demo 也支援本地 `.env` 設定檔，讓操作人員不用每次都手動 export 環境變數，就能接到既有 bridge。
+
 ### Approval Flow
 
 ![Approval or OTP flow for elevated remote actions](./assets/screenshots/approval-flow.png)

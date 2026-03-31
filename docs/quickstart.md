@@ -126,11 +126,23 @@ If the bridge is unavailable, the public plugin falls back to demo mode.
 
 ## 8. Connect the Node.js Demo
 
-Export:
+Create a local config file:
 
 ```bash
-export WCG_BRIDGE_URL=http://127.0.0.1:8765
-export WCG_BRIDGE_TOKEN=change-me
+cd node-demo
+cp .env.example .env
+```
+
+Edit `.env` with your bridge values, for example:
+
+```dotenv
+WCG_BRIDGE_URL=http://127.0.0.1:8765
+WCG_BRIDGE_TOKEN=change-me
+```
+
+Then run:
+
+```bash
 cd node-demo
 node server.js
 ```
@@ -140,6 +152,8 @@ Open:
 `http://127.0.0.1:8090`
 
 This gives you the same operator flow in a small Node.js runtime.
+
+If you prefer shell exports instead of `.env`, those still work and override file-based settings.
 
 ## Optional: Use systemd
 

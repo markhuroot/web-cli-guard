@@ -273,6 +273,8 @@ Once you add real images under `assets/screenshots/`, the section below can act 
 
 The repository also includes a minimal Node.js UI under [`node-demo/`](./node-demo/). It follows the same pattern as the PHP demo, but may fit teams that prefer a small JavaScript runtime over PHP for an internal operator console.
 
+The Node.js demo also supports a local `.env` file so operators can point it at a bridge without editing code or exporting variables every time.
+
 ### Approval Flow
 
 ![Approval or OTP flow for elevated remote actions](./assets/screenshots/approval-flow.png)

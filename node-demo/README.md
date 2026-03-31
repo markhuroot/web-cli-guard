@@ -30,6 +30,27 @@ Then open:
 ## Bridge Mode
 
 ```bash
+cd node-demo
+cp .env.example .env
+```
+
+Edit `.env`:
+
+```dotenv
+WCG_BRIDGE_URL=http://127.0.0.1:8765
+WCG_BRIDGE_TOKEN=change-me
+```
+
+Then run:
+
+```bash
+cd node-demo
+node server.js
+```
+
+You can still override settings with exported environment variables:
+
+```bash
 export WCG_BRIDGE_URL=http://127.0.0.1:8765
 export WCG_BRIDGE_TOKEN=change-me
 cd node-demo
@@ -44,6 +65,20 @@ In bridge mode, the same UI proxies:
 - `POST /send-key`
 
 to the configured tmux bridge.
+
+## Configuration
+
+Supported environment variables:
+
+- `WCG_NODE_HOST`
+- `WCG_NODE_PORT`
+- `WCG_BRIDGE_URL`
+- `WCG_BRIDGE_TOKEN`
+
+At startup, the demo tries to load `.env` from:
+
+1. the current working directory
+2. the `node-demo/` directory
 
 ## Why This Demo Exists
 
