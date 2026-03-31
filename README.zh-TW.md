@@ -278,6 +278,8 @@ bridge 則應該只提供有限指令，例如：
 
 這個 Node.js demo 也支援本地 `.env` 設定檔，讓操作人員不用每次都手動 export 環境變數，就能接到既有 bridge。
 
+現在也內建了 bridge 測試區塊，能先確認 health 與 allowed sessions，再決定是否送出操作。
+
 ### Approval Flow
 
 ![Approval or OTP flow for elevated remote actions](./assets/screenshots/approval-flow.png)

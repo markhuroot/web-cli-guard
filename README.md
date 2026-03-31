@@ -275,6 +275,8 @@ The repository also includes a minimal Node.js UI under [`node-demo/`](./node-de
 
 The Node.js demo also supports a local `.env` file so operators can point it at a bridge without editing code or exporting variables every time.
 
+It now includes a built-in bridge test action so operators can verify health and allowed sessions before trying to send commands.
+
 ### Approval Flow
 
 ![Approval or OTP flow for elevated remote actions](./assets/screenshots/approval-flow.png)

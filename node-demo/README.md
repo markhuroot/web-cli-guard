@@ -13,6 +13,7 @@ It uses the built-in `http` module only.
   - pane capture
   - text send
   - special-key send
+  - bridge health and session test
 
 ## Run
 
@@ -61,10 +62,18 @@ In bridge mode, the same UI proxies:
 
 - `GET /sessions`
 - `GET /capture`
+- `GET /health`
 - `POST /send-text`
 - `POST /send-key`
 
 to the configured tmux bridge.
+
+The page also includes a `Test Bridge` action that reports:
+
+- runtime mode
+- bridge service name
+- allowed session count
+- allowed session names
 
 ## Configuration
 

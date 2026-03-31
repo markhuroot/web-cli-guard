@@ -202,6 +202,28 @@ function sanitizeSession(session, allowedNames) {
   return allowedNames.includes(value) ? value : '';
 }
 
+async function runBridgeTest() {
+  if (!BRIDGE_MODE) {
+    return {
+      runtime_mode: 'demo',
+      service: 'web-cli-guard-node-demo',
+      session_count: Object.keys(DEMO_SESSIONS).length,
+      sessions: Object.keys(DEMO_SESSIONS),
+      message: 'Demo mode active. Configure WCG_BRIDGE_URL and WCG_BRIDGE_TOKEN to test a real bridge.',
+    };
+  }
+  const health = await bridgeRequest('GET', '/health');
+  const sessionsData = await bridgeRequest('GET', '/sessions');
+  const sessionNames = (sessionsData.sessions || []).map((item) => item.name);
+  return {
+    runtime_mode: 'bridge',
+    service: String(health.service || 'web-cli-guard-python-bridge'),
+    session_count: sessionNames.length,
+    sessions: sessionNames,
+    message: `Bridge reachable. ${sessionNames.length} allowed session(s) returned.`,
+  };
+}
+
 function readBody(req) {
   return new Promise((resolve, reject) => {
     let raw = '';
@@ -246,6 +268,8 @@ function renderHtml() {
     .badge.bridge { background:#ecfdf5; color:#047857; }
     .muted { color:var(--muted); line-height:1.7; }
     .status { color:#64748b; font-size:13px; margin-bottom:12px; }
+    .bridge-test { margin-top:14px; padding:14px; border:1px solid var(--line); border-radius:18px; background:#fff; }
+    .bridge-test pre { margin:12px 0 0; padding:12px; border-radius:14px; background:#f8fafc; color:#334155; font:12px/1.6 Consolas,Monaco,monospace; white-space:pre-wrap; word-break:break-word; }
     @media (max-width: 860px) { .grid { grid-template-columns:1fr; } }
   </style>
 </head>
@@ -282,6 +306,13 @@ function renderHtml() {
           <label><input type="checkbox" id="append-enter" checked> Send Enter after the command</label>
           <button id="send">Send</button>
         </div>
+        <div class="bridge-test">
+          <strong>Bridge Connection</strong>
+          <div class="row">
+            <button id="test-bridge">Test Bridge</button>
+          </div>
+          <pre id="bridge-test-output">Bridge test has not been run yet.</pre>
+        </div>
       </div>
     </div>
   </div>
@@ -293,12 +324,16 @@ function renderHtml() {
     const screenNode = document.getElementById('screen');
     const commandNode = document.getElementById('command');
     const appendEnterNode = document.getElementById('append-enter');
+    const bridgeTestOutputNode = document.getElementById('bridge-test-output');
 
     function setStatus(message) { statusNode.textContent = message; }
     function setMode(mode) {
       state.mode = mode || 'demo';
       badgeNode.textContent = state.mode === 'bridge' ? 'Bridge Mode' : 'Node Demo';
       badgeNode.classList.toggle('bridge', state.mode === 'bridge');
+    }
+    function setBridgeTest(message) {
+      bridgeTestOutputNode.textContent = message;
     }
     async function api(path, options) {
       const response = await fetch(path, Object.assign({ headers: { 'Content-Type': 'application/json' } }, options || {}));
@@ -334,6 +369,24 @@ function renderHtml() {
       setMode(json.runtime_mode || 'demo');
       renderSessions();
     }
+    async function testBridge() {
+      setBridgeTest('Testing bridge...');
+      try {
+        const json = await api('/api/bridge-test');
+        setMode(json.runtime_mode || state.mode);
+        const lines = [
+          'mode=' + (json.runtime_mode || 'demo'),
+          'service=' + (json.service || 'unknown'),
+          'session_count=' + Number(json.session_count || 0),
+          'sessions=' + ((json.sessions || []).join(', ') || '(none)'),
+          '',
+          String(json.message || 'Bridge test finished.'),
+        ];
+        setBridgeTest(lines.join('\n'));
+      } catch (error) {
+        setBridgeTest(error.message || 'Bridge test failed.');
+      }
+    }
     async function refresh() {
       if (!state.session || state.busy) return;
       setStatus('Refreshing ' + state.session + '...');
@@ -360,13 +413,17 @@ function renderHtml() {
     document.querySelectorAll('[data-key]').forEach((button) => button.addEventListener('click', () => send({ key: button.dataset.key }, 'Sending key...')));
     document.querySelectorAll('[data-command]').forEach((button) => button.addEventListener('click', () => send({ text: button.dataset.command, append_enter: true }, 'Sending command...')));
     document.getElementById('refresh').addEventListener('click', refresh);
+    document.getElementById('test-bridge').addEventListener('click', testBridge);
     document.getElementById('send').addEventListener('click', () => {
       const text = String(commandNode.value || '').trim();
       if (!text) return setStatus('Type a command first.');
       send({ text, append_enter: !!appendEnterNode.checked }, 'Sending command...');
       commandNode.value = '';
     });
-    loadSessions().then(refresh).catch((error) => setStatus(error.message || 'Failed to load'));
+    loadSessions().then(() => Promise.all([refresh(), testBridge()])).catch((error) => {
+      setStatus(error.message || 'Failed to load');
+      setBridgeTest(error.message || 'Bridge test failed.');
+    });
   </script>
 </body>
 </html>`;
@@ -401,6 +458,15 @@ const server = http.createServer(async (req, res) => {
         return json(res, 200, { ok: true, session, output: data.output || '', runtime_mode: 'bridge' });
       }
       return json(res, 200, { ok: true, session, output: getDemoState(session).output, runtime_mode: 'demo' });
+    } catch (error) {
+      return json(res, 502, { ok: false, message: error.message });
+    }
+  }
+
+  if (url.pathname === '/api/bridge-test') {
+    try {
+      const result = await runBridgeTest();
+      return json(res, 200, Object.assign({ ok: true }, result));
     } catch (error) {
       return json(res, 502, { ok: false, message: error.message });
     }
