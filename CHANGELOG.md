@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file.
 
+## v0.2.1
+
+- added a zero-dependency `node-demo/` web UI for demo or bridge-backed operator workflows
+- added local `.env` support and a built-in bridge test panel to `node-demo/`
+- added a minimal `node-bridge/` implementation for real tmux-backed session access
+- added a `systemd` example for keeping the Node bridge alive across reboots
+- expanded `docs/quickstart.md` and the bilingual README files with Python vs Node bridge/runtime guidance
+- extended GitHub Actions CI to syntax-check both the Node demo and the Node bridge
+
 ## v0.2.0
 
 - added a minimal `python-bridge/` implementation for real tmux-backed session access

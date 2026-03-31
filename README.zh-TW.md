@@ -263,6 +263,17 @@ bridge 則應該只提供有限指令，例如：
 
 - `examples/systemd/web-cli-guard-node-bridge.service.example`
 
+## Python 與 Node 路線
+
+兩條 runtime 路線都遵循同一套 narrow bridge 模型，差別主要在團隊習慣的 runtime 與部署方式。
+
+| 路線 | 適合 | 主要組成 |
+| --- | --- | --- |
+| Python 路線 | 主機本來就有 Python 類型的維運工具 | `python-bridge/` + `php-demo/` 或 WordPress plugin |
+| Node 路線 | 團隊偏好 JavaScript-only 的部署與操作介面 | `node-bridge/` + `node-demo/` |
+
+不需要兩條都暴露。通常選一條 bridge runtime 即可，盡量維持 localhost 綁定，再把核准流程與操作人員驗證留在 web layer。
+
 ## 截圖區
 
 加入實際圖片後，下方區塊可以直接成為 GitHub 首頁的展示區。
@@ -296,6 +307,7 @@ bridge 則應該只提供有限指令，例如：
 第一版 release 草稿可參考 [release-notes-v0.1.md](./docs/release-notes-v0.1.md)。
 針對公開版補強的 `v0.1.1` 可參考 [release-notes-v0.1.1.md](./docs/release-notes-v0.1.1.md)。
 第一個 bridge-capable starter 版本可參考 [release-notes-v0.2.0.md](./docs/release-notes-v0.2.0.md)。
+雙 runtime bridge 更新可參考 [release-notes-v0.2.1.md](./docs/release-notes-v0.2.1.md)。
 
 ## License
 

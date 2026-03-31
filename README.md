@@ -261,6 +261,17 @@ If you want the Node bridge to stay up across reboots, see:
 
 - `examples/systemd/web-cli-guard-node-bridge.service.example`
 
+## Python vs Node Paths
+
+Both runtime paths follow the same narrow bridge model. The main difference is operator preference and deployment habits.
+
+| Path | Best when | Main pieces |
+| --- | --- | --- |
+| Python route | the host already uses Python-based admin tooling | `python-bridge/` + `php-demo/` or WordPress plugin |
+| Node route | the team prefers JavaScript-only deployment and operator tooling | `node-bridge/` + `node-demo/` |
+
+You do not need to expose both. Pick one bridge runtime, keep it localhost-only when possible, and let the web layer handle approval and operator authentication.
+
 ## Screenshot Slots
 
 Once you add real images under `assets/screenshots/`, the section below can act as the GitHub landing gallery.
@@ -294,6 +305,7 @@ It now includes a built-in bridge test action so operators can verify health and
 For a suggested first GitHub release note, see [release-notes-v0.1.md](./docs/release-notes-v0.1.md).
 For the next small presentation-focused release, see [release-notes-v0.1.1.md](./docs/release-notes-v0.1.1.md).
 For the first bridge-capable starter release, see [release-notes-v0.2.0.md](./docs/release-notes-v0.2.0.md).
+For the dual-runtime bridge update, see [release-notes-v0.2.1.md](./docs/release-notes-v0.2.1.md).
 
 ## License
 
