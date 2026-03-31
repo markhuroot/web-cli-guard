@@ -171,6 +171,7 @@ If you prefer shell exports instead of `.env`, those still work and override fil
 The repo already includes a service example:
 
 - `examples/systemd/dreamj-tmuxsvc.service.example`
+- `examples/systemd/web-cli-guard-node-bridge.service.example`
 
 This is useful when you want tmux sessions to survive reboots.
 

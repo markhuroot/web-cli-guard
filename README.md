@@ -257,6 +257,10 @@ The example stays intentionally small:
 - `list-sessions`, `capture-pane`, `send-text`, `send-key`
 - no arbitrary shell execution endpoint
 
+If you want the Node bridge to stay up across reboots, see:
+
+- `examples/systemd/web-cli-guard-node-bridge.service.example`
+
 ## Screenshot Slots
 
 Once you add real images under `assets/screenshots/`, the section below can act as the GitHub landing gallery.

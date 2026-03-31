@@ -1,0 +1,25 @@
+[Unit]
+Description=Example Node.js tmux bridge for Web CLI Guard
+After=network.target
+
+[Service]
+Type=simple
+User=tmuxsvc
+Group=tmuxsvc
+WorkingDirectory=/opt/web-cli-guard
+ExecStart=/usr/bin/node /opt/web-cli-guard/node-bridge/server.js \
+  --host 127.0.0.1 \
+  --port 8766 \
+  --token change-me \
+  --socket /var/lib/web-cli-guard-tmux/default.sock \
+  --allow-session agent-main
+Restart=on-failure
+RestartSec=2
+NoNewPrivileges=yes
+PrivateTmp=yes
+ProtectSystem=strict
+ProtectHome=true
+ReadWritePaths=/var/lib/web-cli-guard-tmux
+
+[Install]
+WantedBy=multi-user.target

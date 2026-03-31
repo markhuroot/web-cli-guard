@@ -259,6 +259,10 @@ bridge 則應該只提供有限指令，例如：
 - 提供 `health / sessions / capture / send-text / send-key`
 - 不提供任意 shell execution API
 
+如果你要讓 Node bridge 跟著系統重啟後自動回來，可參考：
+
+- `examples/systemd/web-cli-guard-node-bridge.service.example`
+
 ## 截圖區
 
 加入實際圖片後，下方區塊可以直接成為 GitHub 首頁的展示區。
